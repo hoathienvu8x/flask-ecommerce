@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block head %}
+<title></title>
+<style>
+</style>
+{% endblock %}
+{% block navi %}
+{% endblock %}
+{% block content %}
+<main>
+{% if product %}
+    <h1>{{ product.name }}</h1>
+    <img src="{{ site_url }}/products/{{ product.image }}" alt="{{ product.name | safe }}" title="{{ product.name | safe }}" />
+    <p>
+        <strong>{{ "{:,}".format(product.discounted_price | int) }}</strong>
+        {% if product.regular_price != product.discounted_price %}
+        <del>{{ "{:,}".format(product.regular_price | int) }}</del>
+        {% endif %}
+    </p>
+    <div>
+        {{ product.description }}
+    </div>
+    <a href="#">Add to cart</a>
+{% endif %}
+{% if others %}
+    <ul>
+    {% for prd in others %}
+    <li>
+        <article id="product-{{ prd.id }}">
+            <a href="{{ url_for(".detail_product",name=prd.slug) }}">
+                <img src="{{ site_url }}/thumbnail/{{ prd.image }}" alt="{{ prd.name | safe }}" title="{{ prd.name | safe }}" />
+            </a>
+            <h3><a href="{{ url_for(".detail_product",name=prd.slug) }}">{{ prd.name }}</a></h3>
+            <p>
+                <strong>{{ "{:,}".format(prd.discounted_price | int) }}</strong>
+                {% if prd.regular_price != prd.discounted_price %}
+                <del>{{ "{:,}".format(prd.regular_price | int) }}</del>
+                {% endif %}
+            </p>
+            <a href="#" class="addtocart" data-id="{{ prd.id }}" data-quantity="1">Add to cart</a>
+        </article>
+    </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+</main>
+{% endblock %}

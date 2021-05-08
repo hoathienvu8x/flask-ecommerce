@@ -7,5 +7,23 @@
 {% block navi %}
 {% endblock %}
 {% block content %}
-
+<main>
+{% if products %}
+    {% for prd in products %}
+    <article id="product-{{ prd.id }}">
+        <a href="{{ url_for(".detail_product",name=prd.slug) }}">
+            <img src="{{ site_url }}/thumbnail/{{ prd.image }}" alt="{{ prd.name | safe }}" title="{{ prd.name | safe }}" />
+        </a>
+        <h3><a href="{{ url_for(".detail_product",name=prd.slug) }}">{{ prd.name }}</a></h3>
+        <p>
+            <strong>{{ "{:,}".format(prd.discounted_price | int) }}</strong>
+            {% if prd.regular_price != prd.discounted_price %}
+            <del>{{ "{:,}".format(prd.regular_price | int) }}</del>
+            {% endif %}
+        </p>
+        <a href="#" class="addtocart" data-id="{{ prd.id }}" data-quantity="1">Add to cart</a>
+    </article>
+    {% endfor %}
+{% endif %}
+</main>
 {% endblock %}

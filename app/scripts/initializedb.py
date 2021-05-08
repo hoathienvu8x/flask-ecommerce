@@ -2,6 +2,7 @@
 
 from ..models.user import User
 from ..models.option import Option
+from ..models.product import Product
 
 def init_database(db):
     db.drop_all()

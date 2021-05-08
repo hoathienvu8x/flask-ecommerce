@@ -5,4 +5,8 @@ from flask import render_template
 
 @engine.route("/")
 def homepage():
-    return render_template("index.html", site_url=SITE_URL)
+    from ..models.product import Product
+
+    products = Product.query.all()
+
+    return render_template("index.html", site_url=SITE_URL, products=products)

@@ -24,5 +24,7 @@ AUTH_COOKIE_NAME = 'm48CFwYC5e'
 
 SITE_URL = ""
 IMAGE_FOLDER = os.path.join(engine.root_path, "static", "images")
+THUMBNAIL_FOLDER = os.path.join(engine.root_path, "static", "thumbnails")
+UPLOAD_FOLDER = os.path.join(engine.root_path, "static", "products")
 
 from .views import *
