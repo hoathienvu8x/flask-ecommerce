@@ -1,0 +1,28 @@
+{% extends 'admin.html' %}
+{% block head %}
+<title></title>
+<style>
+</style>
+{% endblock %}
+{% block navi %}
+{% endblock %}
+{% block content %}
+{% if args and args.msg %}
+<div class="message{% if args.status %} {{ args.status }}{% endif%}">
+    <p>{{ args.msg }}</p>
+</div>
+{% endif %}
+<form action="{{ url_for(".admin_login") }}" method="post">
+    <p><input type="text" name="login" value="" placeholder="Username/Email ?" /></p>
+    <p><input type="password" name="password" value="" placeholder="Password ?" /></p>
+    <p>
+        <label for="remember_me">
+            <input type="checkbox" name="remember" id="remember_me" value="y" />
+            Remember me ?
+        </label>
+    </p>
+    <p>
+        <input type="submit" value="Login" />
+    </p>
+</form>
+{% endblock %}
