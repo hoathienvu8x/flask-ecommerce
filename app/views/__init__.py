@@ -2,5 +2,5 @@
 
 __all__ = [
     "errors", "login", "logout", "static", "template",
-    "home", "dashboard", "product"
+    "home", "dashboard", "product", "cart"
 ]

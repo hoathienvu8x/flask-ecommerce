@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block head %}
+<title></title>
+<style>
+</style>
+{% endblock %}
+{% block navi %}
+{% endblock %}
+{% block content %}
+<main>
+{% if items and items | length > 0 %}
+    {% for item in items %}
+    <p>{{ item.name }} - {{ item.quantity }} x {{ "{:,}".format(item.discounted|int) }}</p>
+    {% endfor %}
+{% else %}
+<div class="message warning">
+    <p>No item in cart, <a href="{{ url_for(".homepage") }}">shoping now</a></p>
+</div>
+{% endif %}
+</main>
+<script>
+{% if cookie_cart %}
+console.log('{{ cookie_cart }}');
+{% endif %}
+</script>
+{% endblock %}

@@ -9,4 +9,6 @@ def homepage():
 
     products = Product.query.all()
 
-    return render_template("index.html", site_url=SITE_URL, products=products)
+    from app import CART_COOKIE_NAME
+
+    return render_template("index.html", site_url=SITE_URL, products=products, cookie_cart=CART_COOKIE_NAME)

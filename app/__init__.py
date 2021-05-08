@@ -21,6 +21,7 @@ db = SQLAlchemy(engine)
 # Login
 AUTH_KEY = '#Im$nw#u=6eAU>qk6=lZJPa2T,n.~cu/soIF^3|?V4xCAzKjKL-<mA!H$1JD::i'
 AUTH_COOKIE_NAME = 'm48CFwYC5e'
+CART_COOKIE_NAME = 'm6eAUC5e'
 
 SITE_URL = ""
 IMAGE_FOLDER = os.path.join(engine.root_path, "static", "images")
