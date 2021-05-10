@@ -1,7 +1,28 @@
 {% extends 'layout.html' %}
 {% block head %}
-<title></title>
+<title>{{ product.name }}</title>
+<!-- https://webcode.tools/generators/open-graph/product -->
+{% if product %}
+<meta property="og:type" content="product">
+<meta property="og:title" content="{{ product.name | safe }}">
+<meta property="og:url" content="{{ url_for(".detail_product",name=product.slug) }}">
+<meta property="og:image" content="{{ site_url }}/products/{{ product.image }}">
+<meta property="og:description" content="{{ product.description | replace("\n"," ") | safe }}">
+<meta property="product:plural_title" content="{{ product.name | safe }}">
+<meta property="product:price.amount" content="{{ product.regular_price }}">
+<meta property="product:price.currency" content="VNĐ">
+{% endif %}
 <style>
+* {
+    margin:0;
+    padding:0;
+}
+a {
+    text-decoration:none;
+}
+ul, li {
+    list-style:none;
+}
 </style>
 {% endblock %}
 {% block navi %}
@@ -17,9 +38,11 @@
         <del>{{ "{:,}".format(product.regular_price | int) }}</del>
         {% endif %}
     </p>
+    {% if product.description %}
     <div>
-        {{ product.description }}
+        {{ product.description | markdown }}
     </div>
+    {% endif %}
     <a href="{{ url_for(".addtocart",id=product.id) }}" class="addtocart" data-id="{{ product.id }}" data-quantity="1">Add to cart</a>
 {% endif %}
 {% if others %}

@@ -10,7 +10,6 @@ class Product(db.Model):
     slug = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(100), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
     regular_price = db.Column(db.Integer)
     discounted_price = db.Column(db.Integer)
 

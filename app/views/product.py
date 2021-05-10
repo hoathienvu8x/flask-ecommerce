@@ -17,6 +17,8 @@ def detail_product(name=""):
         from .errors import not_found
         return not_found(None)
 
+    product.description = product.description.strip()
+
     from app import db
     others = Product.query.filter(Product.id != product.id).order_by(db.func.random()).limit(5).all()
 
