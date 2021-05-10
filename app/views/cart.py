@@ -78,8 +78,6 @@ def addtocart():
 
     cookie = cart_item_cookie(cart_items)
     
-    print(cookie)
-    
     from datetime import datetime
     from flask import make_response
     resp = make_response(redirect(url_for(".cart_page",add="done")))
@@ -93,4 +91,35 @@ def addtocart():
 
 @engine.route("/remove", methods=['GET','POST'])
 def removeitem():
-    return 'removed'
+    id = request.args.get("id", "0").strip()
+    if not id:
+        return redirect(url_for(".cart_page",removed="invalid"))
+    try:
+        id = int(id)
+    except:
+        pass
+
+    if id <= 0:
+        return redirect(url_for(".cart_page",removed="invalid"))
+
+    cart_items = get_cart(request)
+    if cart_items is None:
+        return redirect(url_for(".cart_page",removed="done"))
+
+    if not (str(id) in cart_items):
+        return redirect(url_for(".cart_page",removed="done"))
+    # https://www.geeksforgeeks.org/python-ways-to-remove-a-key-from-dictionary/
+    del cart_items[str(id)]
+
+    from datetime import datetime
+    from flask import make_response
+    resp = make_response(redirect(url_for(".cart_page",removed="done")))
+
+    expiration = int(datetime.timestamp(datetime.now())) + 3600 * 24 * 30 * 12
+    expired = datetime.fromtimestamp(int(expiration))
+
+    cookie = cart_item_cookie(cart_items)
+
+    resp.set_cookie(CART_COOKIE_NAME, cookie, expires=expired)
+
+    return resp
