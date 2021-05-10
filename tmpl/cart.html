@@ -1,24 +1,32 @@
 {% extends 'layout.html' %}
 {% block head %}
 <title></title>
-<style>
-</style>
 {% endblock %}
 {% block navi %}
 {% endblock %}
 {% block content %}
 <main>
 {% if items and items | length > 0 %}
+<form action="{{ url_for(".cart_page") }}" method="post">
     <table>
+    {% set ftotal= {'total': 0} %}
     {% for item in items %}
     <tr id="item-{{ item.id }}">
         <td><a class="removeitem" href="{{ url_for(".removeitem",id=item.id) }}" data-id="{{ item.id }}">x</a></td>
         <td>{{ item.name }}</td>
-        <td><input type="number" value="{{ item.quantity }}" /></td>
-        <td>{{ "{:,}".format(item.discounted|int) }} VNĐ</td>
+        <td><input type="number" value="{{ item.quantity }}" name="qty[{{ item.id }}]" min="1" max="100" /></td>
+        <td>{{ "{:,}".format(item.discounted|int) }}&#8363;</td>
     </tr>
+    {% set subtotal = (item.quantity | int) * (item.discounted | int) %}
+    <!-- https://stackoverflow.com/a/61098160 -->
+    {% if ftotal.update({'total': ftotal.total + subtotal}) %}{% endif %}
     {% endfor %}
+    <tr>
+        <td colspan="3">Total:</td>
+        <td>{{ "{:,}".format(ftotal.total) }}&#8363;</td>
+    </tr>
     </table>
+</form>
 {% else %}
 <div class="message warning">
     <p>No item in cart, <a href="{{ url_for(".homepage") }}">shoping now</a></p>

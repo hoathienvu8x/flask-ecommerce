@@ -86,7 +86,7 @@ investing your time into learning it.
 Jinja2 essentially needs two source ingredients, template and data
 that will be used to render the final document.
 
-![j2-render-flow](ttl255/j2-render-flow-nofill.png)
+![](ttl255/j2-render-flow-nofill.png)
 
 Jinja2 doesn't care where the data comes from, this could come from JSON
 returned by some API, be loaded from static YAML file,
@@ -148,6 +148,8 @@ place followed by re-generation of the configs for all of the devices.
 
 For the sake of our example I decided to turn hostname, name-servers
 and ntp servers into variables. Our end template can be found below:
+
+\newpage
 
     hostname {{ hostname }}
 

@@ -8,7 +8,7 @@ def get_cart(req):
     if not cookies:
         return None
     cart_items = {}
-    a = cookies.strip().split(",")
+    a = cookies.strip().split("|")
     for i in range(len(a)):
         x = a[i].strip().split(":")
         if len(x) != 2:
@@ -28,10 +28,37 @@ def cart_item_cookie(items):
     for id in items:
         vals.append("{}:{}".format(id, items[id]))
 
-    return ",".join(vals)
+    return "|".join(vals)
 
 @engine.route("/cart", methods=['GET','POST'])
 def cart_page():
+    if request.method == "POST":
+        cart_items = get_cart(request)
+        if cart_items is None:
+            cart_items = []
+        for id in cart_items:
+            try:
+                v = int(request.form.get('qty[{}]'.format(id),"0"))
+                if v > 0:
+                    cart_items[id] = "{}".format(v)
+                else:
+                    del cart_items[id]
+            except:
+                del cart_items[id]
+
+        cookie = cart_item_cookie(cart_items)
+        
+        from datetime import datetime
+        from flask import make_response
+        resp = make_response(redirect(url_for(".cart_page",updated="true")))
+
+        expiration = int(datetime.timestamp(datetime.now())) + 3600 * 24 * 30 * 12
+        expired = datetime.fromtimestamp(int(expiration))
+
+        resp.set_cookie(CART_COOKIE_NAME, cookie, expires=expired)
+
+        return resp
+
     items = []
     cart_items = get_cart(request)
     if cart_items is not None:
