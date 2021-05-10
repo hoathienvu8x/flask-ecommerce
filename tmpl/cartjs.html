@@ -23,20 +23,25 @@ function getCookie(name) {
 function eraseCookie(name) {   
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
+function get_cart_item() {
+    var cookie = getCookie('{{ cookie_cart }}') || '';
+    var items = (function(a) {
+        var obj = {};
+        for(var i in a) {
+            var x = a[i].trim().split(':');
+            if (x.length != 2) continue;
+            obj[x[0]] = Number(x[1])
+        }
+        return obj;
+    })(cookie.split(','));
+    return items;
+}
 document.addEventListener("DOMContentLoaded", function(e) {
+    {% if not page_id %}
     document.querySelectorAll('a.addtocart').forEach(function(ele) {
         ele.addEventListener('click', function(e) {
             e.preventDefault();
-            var cookie = getCookie('{{ cookie_cart }}') || '';
-            var items = (function(a) {
-                var obj = {};
-                for(var i in a) {
-                    var x = a[i].trim().split(':');
-                    if (x.length != 2) continue;
-                    obj[x[0]] = Number(x[1])
-                }
-                return obj;
-            })(cookie.split(','));
+            var items = get_cart_item();
             var obj = e.target.dataset;
             if (obj.id) {
                 if (items.hasOwnProperty(obj.id)) {
@@ -59,6 +64,30 @@ document.addEventListener("DOMContentLoaded", function(e) {
             return false;
         }, false);
     });
+    {% endif %}
+    {% if page_id and page_id == "cart" %}
+    document.querySelectorAll('a.removeitem').forEach(function(ele) {
+        ele.addEventListener('click', function(e) {
+            e.preventDefault();
+            var obj = e.target.dataset;
+            if (obj.id) {
+                var items = get_cart_item();
+                if (items.hasOwnProperty(obj.id)) {
+                    delete items[obj.id];
+                }
+                var arr = [];
+                for(var k in items) {
+                    arr.push(k+':'+items[k].toString());
+                }
+                setCookie('{{ cookie_cart }}', arr.join(','), 365);
+                document.querySelectorAll('tr#item-'+obj.id).forEach(function(el) {
+                    el.remove();
+                });
+            }
+            return false;
+        }, false);
+    });
+    {% endif %}
 }, false);
 </script>
 {% endif %}

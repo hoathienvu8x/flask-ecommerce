@@ -11,8 +11,8 @@
 {% if items and items | length > 0 %}
     <table>
     {% for item in items %}
-    <tr>
-        <td><a href="#">x</a></td>
+    <tr id="item-{{ item.id }}">
+        <td><a class="removeitem" href="{{ url_for(".removeitem",id=item.id) }}" data-id="{{ item.id }}">x</a></td>
         <td>{{ item.name }}</td>
         <td><input type="number" value="{{ item.quantity }}" /></td>
         <td>{{ "{:,}".format(item.discounted|int) }} VNĐ</td>
@@ -25,9 +25,5 @@
 </div>
 {% endif %}
 </main>
-<script>
-{% if cookie_cart %}
-console.log('{{ cookie_cart }}');
-{% endif %}
-</script>
+{% include 'cartjs.html' %}
 {% endblock %}

@@ -52,7 +52,7 @@ def cart_page():
                 "quantity": cart_items[str(v.id)] if str(v.id) in cart_items else 1
             } for v in query ]
 
-    return render_template("cart.html", site_url=SITE_URL,items=items)
+    return render_template("cart.html", site_url=SITE_URL,items=items, cookie_cart=CART_COOKIE_NAME,page_id="cart")
 
 @engine.route("/addtocart",methods=['GET','POST'])
 def addtocart():
