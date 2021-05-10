@@ -1877,9 +1877,14 @@ a per-block then we need to resort to manual control.
 ## Manual Control
 
 Jinja2 allows us to manually control generation of whitespaces.
-You do it by using a minus sing `-` to strip whitespaces from blocks, comments or variable expressions. You need to add it to the start or end of given expression to remove whitespaces before or after the block, respectively.
+You do it by using a minus sing `-` to strip whitespaces from blocks,
+comments or variable expressions. You need to add it to the start or
+end of given expression to remove whitespaces
+before or after the block, respectively.
 
-As always, it's best to learn from examples. We'll go back to example from the beginning of the post. First we render without any `-` signs added:
+As always, it's best to learn from examples. We'll go back to
+example from the beginning of the post.
+First we render without any `-` signs added:
 
 
     {% for iname, idata in interfaces.items() %}
@@ -1895,7 +1900,8 @@ Result:
 
 ![](ttl255/hyphen-01.png)
 
-Right, some extra newlines and there are additional spaces as well. Let's add minus sign at the end of `for` block:
+Right, some extra newlines and there are additional spaces as well.
+Let's add minus sign at the end of `for` block:
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -1911,7 +1917,9 @@ Right, some extra newlines and there are additional spaces as well. Let's add mi
 
 Looks promising, we removed two of the extra newlines.
 
-Next we look at `if` block. We need to get rid of the newlines this block generates so we try adding `-` at the end, just like we did with `for` block.
+Next we look at `if` block. We need to get rid of the newlines this
+block generates so we try adding `-` at the end,
+just like we did with `for` block.
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -1925,7 +1933,10 @@ Next we look at `if` block. We need to get rid of the newlines this block genera
 
 ![](ttl255/hyphen-03.png)
 
-Newline after line with `description` under `Ethernet2` is gone. Oh, but wait, why do we have two spaces in the line with `ip address` now? Aha! These must've been the two spaces preceding the `if` block. Let's just add `-` to the beginning of that block as well and we're done!
+Newline after line with `description` under `Ethernet2` is gone.
+Oh, but wait, why do we have two spaces in the line with `ip address` now?
+Aha! These must've been the two spaces preceding the `if` block.
+Let's just add `-` to the beginning of that block as well and we're done!
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -1941,11 +1952,22 @@ Newline after line with `description` under `Ethernet2` is gone. Oh, but wait, w
 
 Hmm, now it's all broken! What happened here? A very good question indeed.
 
-So here's the thing. These magical minus signs remove **all** of the whitespaces before or after the block, not just whitespaces on the same line. Not sure if you expected that, I certainly did not when I first used manual whitespace control!
+So here's the thing. These magical minus signs remove **all** of
+the whitespaces before or after the block, not just whitespaces
+on the same line. Not sure if you expected that,
+I certainly did not when I first used manual whitespace control!
 
-In our concrete case, the first `-` we added to the end of `if` block stripped newline AND one space on the next line, the one before **ip address***. Because, if we now look closely, we should've had three spaces there not just two. One space that we placed there ourselves and two spaces that we had in front of the `if` block. But that space placed by us was removed by Jinja2 due to `-` sign placed in the `if` block.
+In our concrete case, the first `-` we added to the end
+of `if` block stripped newline AND one space on the next line,
+the one before **ip address***. Because, if we now look closely,
+we should've had three spaces there not just two. One space that we
+placed there ourselves and two spaces that we had in front of
+the `if` block. But that space placed by us was removed
+by Jinja2 due to `-` sign placed in the `if` block.
 
-Not all is lost though. You might notice that just adding `-` at the beginning of `if` and `endif` blocks will render text as intended. Let's try doing that and see what happens.
+Not all is lost though. You might notice that just adding `-`
+at the beginning of `if` and `endif` blocks will render text as intended.
+Let's try doing that and see what happens.
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -1961,11 +1983,18 @@ Result:
 
 ![](ttl255/hyphen-05.png)
 
-Bingo! We got rid of all those pesky whitespaces! But was this easy and intuitive? Not really. And to be fair, this wasn't a very involving example. Manually controlling whitespaces is certainly possible but you must remember that all whitespaces are removed, and just the ones on the same line as the block.
+Bingo! We got rid of all those pesky whitespaces! But was this easy
+and intuitive? Not really. And to be fair, this wasn't a very involving
+example. Manually controlling whitespaces is certainly possible but
+you must remember that all whitespaces are removed,
+and just the ones on the same line as the block.
 
 ## Indentation Inside Of Jinja2 Blocks
 
-There is a method of writing blocks that makes things a bit easier and predictable. We simply put opening of the block at the beginning of the line and apply indentation inside of the block. As always, easier to explain using an example:
+There is a method of writing blocks that makes things a bit easier
+and predictable. We simply put opening of the block at the beginning
+of the line and apply indentation inside of the block. As always,
+easier to explain using an example:
 
 
     {% for acl, acl_lines in access_lists.items() %}
@@ -1982,7 +2011,11 @@ There is a method of writing blocks that makes things a bit easier and predictab
     # All ACLs have been generated
 
 
-As you can see we moved block opening `{%` all the way to the left and then indented as appropriate inside of the block. Jinja2 doesn't care about extra spaces inside of the `if` or `for` blocks, it will simply ignore them. It only concerns itself with whitespaces that it finds outside of blocks.
+As you can see we moved block opening `{%` all the way to the left and
+then indented as appropriate inside of the block. Jinja2 doesn't care
+about extra spaces inside of the `if` or `for` blocks, it will simply
+ignore them. It only concerns itself with
+whitespaces that it finds outside of blocks.
 
 Let's render this to see what we get:
 
@@ -2001,7 +2034,9 @@ Let's render this to see what we get:
     # All ACLs have been generated
 
 
-How is this any better you may ask? At first sight, not much better at all. But before I tell you why this might be a good idea, and where it is especially useful I'll show you the same template as we had it previously.
+How is this any better you may ask? At first sight, not much better at all.
+But before I tell you why this might be a good idea, and where it is
+especially useful I'll show you the same template as we had it previously.
 
 We'll render it with `trim_blocks` enabled:
 
@@ -2028,7 +2063,10 @@ We'll render it with `trim_blocks` enabled:
     # All ACLs have been generated
 
 
-Terrible, just terrible. Indentation got completely out of whack. But what am I trying to show you? Well, let's now render version of this template with indentations inside of `for` and `if` blocks, again with `trim_blocks` turned on:
+Terrible, just terrible. Indentation got completely out of whack.
+But what am I trying to show you? Well, let's now render version of
+this template with indentations inside of `for` and `if` blocks,
+again with `trim_blocks` turned on:
 
 
     ip access-list extended al-hq-in
@@ -2038,35 +2076,59 @@ Terrible, just terrible. Indentation got completely out of whack. But what am I 
     # All ACLs have been generated
 
 
-Isn't that nice? Remember that previously we had to enable both `trim_blocks` and `lstrip_blocks` to achieve the same effect.
+Isn't that nice? Remember that previously we had to enable
+both `trim_blocks` and `lstrip_blocks` to achieve the same effect.
 
 So here it is:
 
-Starting Jinja2 blocks from the beginning of the line and applying indentation inside of them is roughly equivalent to enabling `lstrip_block`.
+Starting Jinja2 blocks from the beginning of the line and applying
+indentation inside of them is roughly equivalent to enabling `lstrip_block`.
 
-I say _roughly_ equivalent because we don't strip anything here, we just hide extra spaces inside of blocks preventing them from being picked up at all.
+I say _roughly_ equivalent because we don't strip anything here,
+we just hide extra spaces inside of blocks preventing
+them from being picked up at all.
 
-And there is an extra bonus to using this method, it will make your Jinja2 templates used in Ansible safer. Why? Read on!
+And there is an extra bonus to using this method, it will make your
+Jinja2 templates used in Ansible safer. Why? Read on!
 
 ## Whitespace Control In Ansible
 
-As you probably already know Jinja2 templates are used quite heavily when doing network automation with Ansible. Most people will use Ansible's `template` module to do the rendering of templates. That module by default enables `trim_blocks` option but `lstrip_blocks` is turned off and needs to be enabled manually.
+As you probably already know Jinja2 templates are used quite heavily
+when doing network automation with Ansible. Most people will use
+Ansible's `template` module to do the rendering of templates.
+That module by default enables `trim_blocks` option but `lstrip_blocks`
+is turned off and needs to be enabled manually.
 
-We can assume that most users will use the `template` module with default options which means that using **indentation inside of the block** technique will increase safety of our templates and the rendered text.
+We can assume that most users will use the `template` module with
+default options which means that using **indentation inside of the block**
+technique will increase safety of our templates and the rendered text.
 
-For the above reasons I'd recommend applying this technique if you know your templates will be used in Ansible. You will greatly reduce risk of your templates having seemingly random whitespaces popping up in your configs and other documents.
+For the above reasons I'd recommend applying this technique
+if you know your templates will be used in Ansible.
+You will greatly reduce risk of your templates having seemingly
+random whitespaces popping up in your configs and other documents.
 
-I would also say that it's not a bad idea to always stick to this way of writing your blocks if you haven't yet mastered the arcane ways of Jinja2. There are no real downsides of writing your templates this way.
+I would also say that it's not a bad idea to always stick to this way
+of writing your blocks if you haven't yet mastered the arcane ways
+of Jinja2. There are no real downsides of writing your templates this way.
 
-The only side effect here is how visually templates present themselves, with a lot of blocks templates looking “busy”. This could make it difficult to see lines of text between the blocks since these need to have indentation matching your intent.
+The only side effect here is how visually templates present themselves,
+with a lot of blocks templates looking “busy”. This could make
+it difficult to see lines of text between the blocks since these
+need to have indentation matching your intent.
 
-Personally I always try to use indentation within blocks method in templates meant for Ansible. For other templates, when rendered with Python, I do whatever feels right in terms of readability, and I render all templates with block trimming and stripping enabled.
+Personally I always try to use indentation within blocks method in
+templates meant for Ansible. For other templates, when rendered with Python,
+I do whatever feels right in terms of readability, and I render all
+templates with block trimming and stripping enabled.
 
 ## Example Playbooks
 
-For completeness sake, I built two short Ansible Playbooks, one uses default setting for `template` module while the other enables `lstrip` option.
+For completeness sake, I built two short Ansible Playbooks, one uses
+default setting for `template` module while the other enables `lstrip` option.
 
-We'll be using the same template and data we used for testing `trim` and `lstrip` options previously.
+We'll be using the same template and data we used for testing `trim`
+and `lstrip` options previously.
 
 Playbook using default settings, i.e. only `trim` is turned on:
 
@@ -2100,7 +2162,9 @@ And rendering results:
     # All ACLs have been generated
 
 
-If you recall, we got exactly same result when rendering this template in Python with `trim` option enabled. Again, indentations are misaligned so we need to do better.
+If you recall, we got exactly same result when rendering this template
+in Python with `trim` option enabled. Again, indentations are
+misaligned so we need to do better.
 
 Playbook enabling `lstrip`:
 
@@ -2135,9 +2199,11 @@ Rendered text:
     # All ACLs have been generated
 
 
-And again, same result as when you enabled `trim` and `lstrip` when rendering Jinja2 in Python.
+And again, same result as when you enabled `trim` and `lstrip`
+when rendering Jinja2 in Python.
 
-Finally, let's run the first Playbook, with default setting, using the template with indentation inside of blocks.
+Finally, let's run the first Playbook, with default setting,
+using the template with indentation inside of blocks.
 
 Playbook:
 
@@ -2171,23 +2237,42 @@ Result:
     # All ACLs have been generated
 
 
-So, we didn't have to enable `lstrip` option to get the same, perfect, result. Hopefully now you can see why I recommend using indentation within blocks as the default for Ansible templates. This gives you more confidence that your templates will be rendered the way you wanted them with default settings.
+So, we didn't have to enable `lstrip` option to get the same, perfect,
+result. Hopefully now you can see why I recommend using indentation
+within blocks as the default for Ansible templates. This gives you more
+confidence that your templates will be rendered the way you
+wanted them with default settings.
 
 ## Closing Thoughts
 
-When I sat down to write this post I thought I knew how whitespaces in Jinja2 work. But it turns out that some behaviour was not so clear to me. It was especially true for manual stripping with `-` sign, I keep forgetting that all of the whitespaces before/after the block are stripped, not just the ones on the line with block.
+When I sat down to write this post I thought I knew how whitespaces
+in Jinja2 work. But it turns out that some behaviour was not so
+clear to me. It was especially true for manual stripping with `-` sign,
+I keep forgetting that all of the whitespaces before/after
+the block are stripped, not just the ones on the line with block.
 
-So my advice is this: use trimming and stripping options whenever possible and generally favour indentation within blocks over indentation outside. And spend some time learning how Jinja2 generates whitespaces, that will allow you to take full control over your templates when you need it.
+So my advice is this: use trimming and stripping options whenever
+possible and generally favour indentation within blocks over indentation
+outside. And spend some time learning how Jinja2 generates whitespaces,
+that will allow you to take full control over your templates when you need it.
 
-And that's it, I hope you found this post useful and I look forward to seeing you again!
+And that's it, I hope you found this post useful and I look forward
+to seeing you again!
 
 # Jinja2 Tutorial - Part 3 - Whitespace Control
 
-Text documents are the final result of rendering templates. Depending on the end consumer of these documents whitespace placement could be significant. One of the major niggles in Jinja2, in my opinion, is the way control statements and other elements affect whitespace output in the end documents.
+Text documents are the final result of rendering templates. Depending
+on the end consumer of these documents whitespace placement
+could be significant. One of the major niggles in Jinja2,
+in my opinion, is the way control statements and other elements affect
+whitespace output in the end documents.
 
-To put it bluntly, mastering whitespaces in Jinja2 is the only way of making sure your templates generate text exactly the way you intended.
+To put it bluntly, mastering whitespaces in Jinja2 is the only way of
+making sure your templates generate text exactly the way you intended.
 
-Now we know the importance of the problem, time to understand where it originates, to do that we'll have a look at a lot of examples. Then we'll learn how we can control rendering whitespaces in Jinja2 templates.
+Now we know the importance of the problem, time to understand where it
+originates, to do that we'll have a look at a lot of examples.
+Then we'll learn how we can control rendering whitespaces in Jinja2 templates.
 
 ## Contents
 
@@ -2206,7 +2291,9 @@ Now we know the importance of the problem, time to understand where it originate
 
 ## Understanding Whitespace Rendering In Jinja2
 
-We'll start our learning by looking at how Jinja2 renders whitespaces by looking at trivial example, template with no variables, just two lines of text and a comment:
+We'll start our learning by looking at how Jinja2 renders whitespaces
+by looking at trivial example, template with no variables,
+just two lines of text and a comment:
 
 
     Starting line
@@ -2222,13 +2309,21 @@ This is how it looks like when it's rendered:
     Line after comment
 
 
-Ok, what happened here? Did you expect an empty line to appear in place of our comment? I did not. I'd expect the comment line to just disappear into nothingness, but that's not the case here.
+Ok, what happened here? Did you expect an empty line to appear in place
+of our comment? I did not. I'd expect the comment line to
+just disappear into nothingness, but that's not the case here.
 
-So here's a very important thing about Jinja2. All of the language blocks are removed when the template is rendered but **all** of the whitespaces remain in place. That is if there are spaces, tabs, or newlines, before or after, blocks, then these will be rendered.
+So here's a very important thing about Jinja2. All of the language
+blocks are removed when the template is rendered but **all** of the
+whitespaces remain in place. That is if there are spaces, tabs,
+or newlines, before or after, blocks, then these will be rendered.
 
-This explains why comment block left a blank line once template was rendered. There is a newline character after the `{# #}` block. While the block itself was removed, newline remained.
+This explains why comment block left a blank line once template was
+rendered. There is a newline character after the `{# #}` block.
+While the block itself was removed, newline remained.
 
-Below is a more involving, but fairly typical, template, containing `for` loop and `if` statements:
+Below is a more involving, but fairly typical, template, containing
+`for` loop and `if` statements:
 
 
     {% for iname, idata in interfaces.items() %}
@@ -2264,53 +2359,102 @@ And this is how Jinja2 will render this, with all settings left to defaults:
     ip address 10.50.0.0/31
 
 
-This doesn't look great, does it? There are extra newlines added in few places. Also, interestingly enough, there are leading spaces on some lines, that can't be seen on screen but could really break things for us in the future. Overall it's difficult to figure out where all of the whitespaces came from.
+This doesn't look great, does it? There are extra newlines added in
+few places. Also, interestingly enough, there are leading spaces on
+some lines, that can't be seen on screen but could really break things
+for us in the future. Overall it's difficult to figure out where
+all of the whitespaces came from.
 
-To help you in better visualizing generated text, here's the same output, but now with all of the whitespaces rendered:
+To help you in better visualizing generated text, here's the same output,
+but now with all of the whitespaces rendered:
 
 ![](ttl255/vis-ws-ex01.png)
 
-Each bullet point represents a space character, and return icon represents newlines. You should now clearly see leading spaces that were left by Jinja2 block on three of the lines, as well as all of the extra newlines.
+Each bullet point represents a space character, and return icon
+represents newlines. You should now clearly see leading spaces that
+were left by Jinja2 block on three of the lines,
+as well as all of the extra newlines.
 
-Ok, that's all great you say, but it still is not so obvious where these came from. The real question we want to answer is:
+Ok, that's all great you say, but it still is not so obvious where
+these came from. The real question we want to answer is:
 
 Which template line contributed to which line in the final result?
 
-To answer that question I rendered whitespaces in the template as well as the output text. Then I added colored, numbered, highlight blocks in the lines of interest, to allow us to match source with the end product.
+To answer that question I rendered whitespaces in the template as well
+as the output text. Then I added colored, numbered, highlight blocks
+in the lines of interest, to allow us to match source with the end product.
 
 ![](ttl255/ws-template-ex01-corr-24-12-2020.png)
 
 ![](ttl255/ws-render-ex01-collaps-24-12-2020.png)
 
-You should now see very easily where each of the Jinja blocks adds whitespaces to the resulting text.
+You should now see very easily where each of the Jinja blocks adds
+whitespaces to the resulting text.
 
 If you're also curious **why** then read on for detailed explanation:
 
-1. Line containing `{% for %}` block, number 1 with blue outlines, ends with a newline. This block gets executed for each key in dictionary. We have 2 keys, so we get extra 2 newlines inserted into final text.
-2. Line containing `{% if %}` block, numbers 2a and 2b with green and light-green outlines, has 2 leading spaces and ends with a newline. This is where things get interesting. The actual `{% if %}` block is removed leaving behind 2 spaces that always get rendered. But trailing newline is inside of the block. This means that with `{% if %}` evaluating to `false` we get 2a but NOT 2b. If it evaluates to `true` we get both 2a AND 2b.
-3. Line containing `{% endif %}` block, numbers 3a and 3b with red and orange outlines, has 2 leading spaces and ends with a newline. This is again interesting and our situation here is the reverse of previous case. Two leading spaces are inside of the `if` block, but the newline is outside of it. So 3b, newline, is always rendered. But when `{% if %}` block evaluates to `true` we also get 3a, if it's `false` then we get 3b only.
+1. Line containing `{% for %}` block, number 1 with blue outlines,
+ends with a newline. This block gets executed for each key in dictionary.
+We have 2 keys, so we get extra 2 newlines inserted into final text.
+2. Line containing `{% if %}` block, numbers 2a and 2b with green and
+light-green outlines, has 2 leading spaces and ends with a newline.
+This is where things get interesting. The actual `{% if %}` block
+is removed leaving behind 2 spaces that always get rendered.
+But trailing newline is inside of the block.
+This means that with `{% if %}` evaluating to `false` we get 2a but NOT 2b.
+If it evaluates to `true` we get both 2a AND 2b.
+3. Line containing `{% endif %}` block, numbers 3a and 3b with
+red and orange outlines, has 2 leading spaces and ends with a newline.
+This is again interesting and our situation here is the reverse
+of previous case. Two leading spaces are inside of the `if` block,
+but the newline is outside of it. So 3b, newline, is always rendered.
+But when `{% if %}` block evaluates to `true` we also get 3a,
+if it's `false` then we get 3b only.
 
-It's also worth pointing out that if your template continued after `{% endfor %}` block, that block would contribute one extra newline. But worry not, we'll have some examples later on illustrating this case.
+It's also worth pointing out that if your template continued
+after `{% endfor %}` block, that block would contribute one extra newline.
+But worry not, we'll have some examples later on illustrating this case.
 
-I hope you'll agree with me that the template we used in our example wasn't especially big or complicated, yet it resulted in a fair amount of additional whitespaces.
+I hope you'll agree with me that the template we used in our example
+wasn't especially big or complicated, yet it resulted in a fair
+amount of additional whitespaces.
 
-Luckily, and I couldn't stress enough how useful that is, there are ways of changing Jinja2 behavior and taking back control over exact look and feel of our text.
+Luckily, and I couldn't stress enough how useful that is,
+there are ways of changing Jinja2 behavior and taking back control
+over exact look and feel of our text.
 
-**Note**. The above explanation was updated on 12 Dec 2020. Previously 1st occurence of 3b was incorrectly attributed to 2b. Many thanks to Lawrr who triple-checked me and greatly helped in getting to the bottom of this!
+**Note**. The above explanation was updated on 12 Dec 2020. Previously
+1st occurence of 3b was incorrectly attributed to 2b.
+Many thanks to Lawrr who triple-checked me and greatly helped
+in getting to the bottom of this!
 
 ## Finding Origin Of Whitespaces - Alternative Way
 
-We've talked a bit how to tame Jinja's engine with regards to whitespace generation. You also know that tools like [**J2Live**](https://j2live.ttl255.com) can help you in visualizing all the whitespaces in the produced text. But can we tell with certainty which template line, containing block, contributed these characters to the final render?
+We've talked a bit how to tame Jinja's engine with regards to
+whitespace generation. You also know that tools like [**J2Live**](https://j2live.ttl255.com)
+can help you in visualizing all the whitespaces in the produced text.
+But can we tell with certainty which template line, containing block,
+contributed these characters to the final render?
 
-To get answer to that question we can use a little trick. I came up with the following technique, that doesn't require any external tools, for matching whitespaces coming from template block lines with extraneous whitespaces appearing in the resulting text document.
+To get answer to that question we can use a little trick.
+I came up with the following technique, that doesn't require any
+external tools, for matching whitespaces coming from template block
+lines with extraneous whitespaces appearing in the resulting text document.
 
-This method is quite simple really, you just need to add unambiguous characters to each of the block lines in the template that correspond to lines in the rendered document.
+This method is quite simple really, you just need to add unambiguous
+characters to each of the block lines in the template that correspond
+to lines in the rendered document.
 
-I find it works especially well with template inheritance and macros, topics we will discuss in the upcoming parts of this tutorial.
+I find it works especially well with template inheritance and macros,
+topics we will discuss in the upcoming parts of this tutorial.
 
 ## Origin Of Whitespaces - Examples
 
-Let's see that secret sauce in action then. We'll place additional characters, carefully selected so that they stand out from surrounding text, in strategic places on the lines with Jinja2 blocks. I'm using the same template we already worked with so previously that you can easily compare the results.
+Let's see that secret sauce in action then. We'll place additional
+characters, carefully selected so that they stand out from surrounding
+text, in strategic places on the lines with Jinja2 blocks.
+I'm using the same template we already worked with so previously
+that you can easily compare the results.
 
 
     {% for iname, idata in interfaces.items() %}(1)
@@ -2337,11 +2481,17 @@ Final result:
     (3)
 
 
-I added `(1)`, `(2)` and `(3)` characters on the lines where we have Jinja2 blocks. The end result matches what we got back from J2Live with `Show whitespaces` option enabled.
+I added `(1)`, `(2)` and `(3)` characters on the lines where we have
+Jinja2 blocks. The end result matches what we got back from
+J2Live with `Show whitespaces` option enabled.
 
-If you don't have access to [**J2Live**](https://j2live.ttl255.com) or you need to troubleshoot whitespace placement in production templates, then I definitely recommend using this method. It's simple but effective.
+If you don't have access to [**J2Live**](https://j2live.ttl255.com)
+or you need to troubleshoot whitespace placement in production templates,
+then I definitely recommend using this method. It's simple but effective.
 
-Just to get more practice, I've added extra characters to slightly more complex template. This one has branching `if` statement and some text below final `endfor` to allow us to see what whitespaces come from that block.
+Just to get more practice, I've added extra characters to slightly more
+complex template. This one has branching `if` statement and some text
+below final `endfor` to allow us to see what whitespaces come from that block.
 
 Our template:
 
@@ -2391,9 +2541,14 @@ End result:
     # All ACLs have been generated
 
 
-A lot is happening here but there are no mysteries anymore. You can easily match each source line with line in the final text. And knowing where the whitespaces are coming from is the first step to learning how to control them, which is what we're going to talk about shortly.
+A lot is happening here but there are no mysteries anymore. You can
+easily match each source line with line in the final text.
+And knowing where the whitespaces are coming from is the
+first step to learning how to control them, which is
+what we're going to talk about shortly.
 
-Also, for comparison is the rendered text without using `helper` characters:
+Also, for comparison is the rendered text without
+using `helper` characters:
 
 
     ip access-list extended al-hq-in
@@ -2410,31 +2565,48 @@ Also, for comparison is the rendered text without using `helper` characters:
     # All ACLs have been generated
 
 
-If you're still reading this, congratulations! Your dedication to mastering whitespace rendering is commendable. Good news is that we're now getting to the bit where we learn how to control Jinja2 behavior.
+If you're still reading this, congratulations! Your dedication
+to mastering whitespace rendering is commendable.
+Good news is that we're now getting to the bit where
+we learn how to control Jinja2 behavior.
 
 ## Controlling Jinja2 Whitespaces
 
-There are broadly three ways in which we can control whitespace generation in our templates:
+There are broadly three ways in which we can control
+whitespace generation in our templates:
 
-1. Enable one of, or both, `trim_blocks` and `lstrip_blocks` rendering options.
-2. Manually strip whitespaces by adding a minus sign `-` to the start or end of the block.
+1. Enable one of, or both, `trim_blocks` and `lstrip_blocks`
+rendering options.
+2. Manually strip whitespaces by adding a minus sign `-`
+to the start or end of the block.
 3. Apply indentation inside of Jinja2 blocks.
 
-First, I'll give you an easy, by far more preferable, way of taming whitespace and then we'll dig into the more involving methods.
+First, I'll give you an easy, by far more preferable,
+way of taming whitespace and then we'll dig into the more involving methods.
 
 So here it comes:
 
 Always render with `trim_blocks` and `lstrip_blocks` options enabled.
 
-That's it, the big secret is out. Save yourself trouble and tell Jinja2 to apply trimming and stripping to all of the blocks.
+That's it, the big secret is out. Save yourself trouble and tell
+Jinja2 to apply trimming and stripping to all of the blocks.
 
-If you use Jinja2 as part of another framework then you might have to consult documentation to see what the default behaviour is and how it can be changed. Later in this post I will explain how we can control whitespaces when using Ansible to render Jinja2 templates.
+If you use Jinja2 as part of another framework then you might have
+to consult documentation to see what the default behaviour is and
+how it can be changed. Later in this post I will explain
+how we can control whitespaces when using Ansible to render Jinja2 templates.
 
-Just a few words of explanation on what these options do. Trimming removes newline after block while stripping removes all of spaces and tabs on the lines preceding the block. Now, if you enable trimming alone, you might still get some funny output if there are any leading whitespaces on the lines containing blocks, so that's why I recommend having both of these enabled.
+Just a few words of explanation on what these options do. Trimming
+removes newline after block while stripping removes all of spaces
+and tabs on the lines preceding the block. Now, if you enable
+trimming alone, you might still get some funny output if there are any
+leading whitespaces on the lines containing blocks, so that's why
+I recommend having both of these enabled.
 
 ## Trimming And Stripping In Action
 
-For example, this is what happens when we enable block trimming but leave block stripping disabled:
+For example, this is what happens when we enable block trimming but
+leave block stripping disabled:
 
 
     ip access-list extended al-hq-in
@@ -2444,7 +2616,9 @@ For example, this is what happens when we enable block trimming but leave block 
     # All ACLs have been generated
 
 
-That's the same example we just had a look at, and I'm sure you didn't expect this to happen at all. Let's add some extra characters to figure out what happened:
+That's the same example we just had a look at, and I'm sure you didn't
+expect this to happen at all. Let's add some extra characters
+to figure out what happened:
 
 
     {% for acl, acl_lines in access_lists.items() %}
@@ -2469,9 +2643,12 @@ That's the same example we just had a look at, and I'm sure you didn't expect th
     # All ACLs have been generated
 
 
-Another puzzle solved, we got rid of newlines with `trim_blocks` enabled but leading spaces in front of `if` and `elif` blocks remained. Something that is completely undesirable.
+Another puzzle solved, we got rid of newlines with `trim_blocks`
+enabled but leading spaces in front of `if` and `elif` blocks
+remained. Something that is completely undesirable.
 
-So how would this template render if we had both trimming and stripping enabled? Have a look:
+So how would this template render if we had both trimming and
+stripping enabled? Have a look:
 
 
     ip access-list extended al-hq-in
@@ -2481,15 +2658,26 @@ So how would this template render if we had both trimming and stripping enabled?
     # All ACLs have been generated
 
 
-Quite pretty right? This is what I meant when I talked about getting **intended** result. No surprises, no extra newlines or spaces, final text matches our expectations.
+Quite pretty right? This is what I meant when I talked about getting
+**intended** result. No surprises, no extra newlines or spaces,
+final text matches our expectations.
 
-Now, I said enabling trim and lstrip options is an easy way, but if for whatever reason you can't use it, or want to have total control over how whitespaces are generated on a per-block then we need to resort to manual control.
+Now, I said enabling trim and lstrip options is an easy way,
+but if for whatever reason you can't use it, or want to have total
+control over how whitespaces are generated on a per-block
+then we need to resort to manual control.
 
 ## Manual Control
 
-Jinja2 allows us to manually control generation of whitespaces. You do it by using a minus sing `-` to strip whitespaces from blocks, comments or variable expressions. You need to add it to the start or end of given expression to remove whitespaces before or after the block, respectively.
+Jinja2 allows us to manually control generation of whitespaces.
+You do it by using a minus sing `-` to strip whitespaces from blocks,
+comments or variable expressions. You need to add it to the start or
+end of given expression to remove whitespaces
+before or after the block, respectively.
 
-As always, it's best to learn from examples. We'll go back to example from the beginning of the post. First we render without any `-` signs added:
+As always, it's best to learn from examples.
+We'll go back to example from the beginning of the post.
+First we render without any `-` signs added:
 
 
     {% for iname, idata in interfaces.items() %}
@@ -2505,7 +2693,8 @@ Result:
 
 ![](ttl255/hyphen-01.png)
 
-Right, some extra newlines and there are additional spaces as well. Let's add minus sign at the end of `for` block:
+Right, some extra newlines and there are additional spaces as well.
+Let's add minus sign at the end of `for` block:
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -2521,7 +2710,9 @@ Right, some extra newlines and there are additional spaces as well. Let's add mi
 
 Looks promising, we removed two of the extra newlines.
 
-Next we look at `if` block. We need to get rid of the newlines this block generates so we try adding `-` at the end, just like we did with `for` block.
+Next we look at `if` block. We need to get rid of the newlines
+this block generates so we try adding `-` at the end,
+just like we did with `for` block.
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -2535,7 +2726,10 @@ Next we look at `if` block. We need to get rid of the newlines this block genera
 
 ![](ttl255/hyphen-03.png)
 
-Newline after line with `description` under `Ethernet2` is gone. Oh, but wait, why do we have two spaces in the line with `ip address` now? Aha! These must've been the two spaces preceding the `if` block. Let's just add `-` to the beginning of that block as well and we're done!
+Newline after line with `description` under `Ethernet2` is gone.
+Oh, but wait, why do we have two spaces in the line with `ip address`
+now? Aha! These must've been the two spaces preceding the `if` block.
+Let's just add `-` to the beginning of that block as well and we're done!
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -2551,11 +2745,22 @@ Newline after line with `description` under `Ethernet2` is gone. Oh, but wait, w
 
 Hmm, now it's all broken! What happened here? A very good question indeed.
 
-So here's the thing. These magical minus signs remove **all** of the whitespaces before or after the block, not just whitespaces on the same line. Not sure if you expected that, I certainly did not when I first used manual whitespace control!
+So here's the thing. These magical minus signs remove **all**
+of the whitespaces before or after the block, not just whitespaces on
+the same line. Not sure if you expected that,
+I certainly did not when I first used manual whitespace control!
 
-In our concrete case, the first `-` we added to the end of `if` block stripped newline AND one space on the next line, the one before **ip address***. Because, if we now look closely, we should've had three spaces there not just two. One space that we placed there ourselves and two spaces that we had in front of the `if` block. But that space placed by us was removed by Jinja2 due to `-` sign placed in the `if` block.
+In our concrete case, the first `-` we added to the end of `if` block
+stripped newline AND one space on the next line, the one before
+**ip address***. Because, if we now look closely, we should've had
+three spaces there not just two. One space that we placed there
+ourselves and two spaces that we had in front of the `if` block.
+But that space placed by us was removed by Jinja2 due to `-`
+sign placed in the `if` block.
 
-Not all is lost though. You might notice that just adding `-` at the beginning of `if` and `endif` blocks will render text as intended. Let's try doing that and see what happens.
+Not all is lost though. You might notice that just adding `-` at
+the beginning of `if` and `endif` blocks will render text as intended.
+Let's try doing that and see what happens.
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -2571,11 +2776,18 @@ Result:
 
 ![](ttl255/hyphen-05.png)
 
-Bingo! We got rid of all those pesky whitespaces! But was this easy and intuitive? Not really. And to be fair, this wasn't a very involving example. Manually controlling whitespaces is certainly possible but you must remember that all whitespaces are removed, and just the ones on the same line as the block.
+Bingo! We got rid of all those pesky whitespaces! But was this easy
+and intuitive? Not really. And to be fair, this wasn't a very involving example.
+Manually controlling whitespaces is certainly possible but you must
+remember that all whitespaces are removed,
+and just the ones on the same line as the block.
 
 ## Indentation Inside Of Jinja2 Blocks
 
-There is a method of writing blocks that makes things a bit easier and predictable. We simply put opening of the block at the beginning of the line and apply indentation inside of the block. As always, easier to explain using an example:
+There is a method of writing blocks that makes things a bit easier and
+predictable. We simply put opening of the block at the beginning
+of the line and apply indentation inside of the block.
+As always, easier to explain using an example:
 
 
     {% for acl, acl_lines in access_lists.items() %}
@@ -2592,7 +2804,11 @@ There is a method of writing blocks that makes things a bit easier and predictab
     # All ACLs have been generated
 
 
-As you can see we moved block opening `{%` all the way to the left and then indented as appropriate inside of the block. Jinja2 doesn't care about extra spaces inside of the `if` or `for` blocks, it will simply ignore them. It only concerns itself with whitespaces that it finds outside of blocks.
+As you can see we moved block opening `{%` all the way to the left and
+then indented as appropriate inside of the block. Jinja2 doesn't
+care about extra spaces inside of the `if` or `for` blocks,
+it will simply ignore them. It only concerns itself
+with whitespaces that it finds outside of blocks.
 
 Let's render this to see what we get:
 
@@ -2611,7 +2827,9 @@ Let's render this to see what we get:
     # All ACLs have been generated
 
 
-How is this any better you may ask? At first sight, not much better at all. But before I tell you why this might be a good idea, and where it is especially useful I'll show you the same template as we had it previously.
+How is this any better you may ask? At first sight, not much better at all.
+But before I tell you why this might be a good idea, and where it is
+especially useful I'll show you the same template as we had it previously.
 
 We'll render it with `trim_blocks` enabled:
 
@@ -2638,7 +2856,10 @@ We'll render it with `trim_blocks` enabled:
     # All ACLs have been generated
 
 
-Terrible, just terrible. Indentation got completely out of whack. But what am I trying to show you? Well, let's now render version of this template with indentations inside of `for` and `if` blocks, again with `trim_blocks` turned on:
+Terrible, just terrible. Indentation got completely out of whack.
+But what am I trying to show you? Well, let's now render version of
+this template with indentations inside of `for` and `if` blocks,
+again with `trim_blocks` turned on:
 
 
     ip access-list extended al-hq-in
@@ -2648,35 +2869,58 @@ Terrible, just terrible. Indentation got completely out of whack. But what am I 
     # All ACLs have been generated
 
 
-Isn't that nice? Remember that previously we had to enable both `trim_blocks` and `lstrip_blocks` to achieve the same effect.
+Isn't that nice? Remember that previously we had to enable both
+`trim_blocks` and `lstrip_blocks` to achieve the same effect.
 
 So here it is:
 
-Starting Jinja2 blocks from the beginning of the line and applying indentation inside of them is roughly equivalent to enabling `lstrip_block`.
+Starting Jinja2 blocks from the beginning of the line and applying
+indentation inside of them is roughly equivalent to enabling `lstrip_block`.
 
-I say _roughly_ equivalent because we don't strip anything here, we just hide extra spaces inside of blocks preventing them from being picked up at all.
+I say _roughly_ equivalent because we don't strip anything here,
+we just hide extra spaces inside of blocks preventing them from being picked up at all.
 
-And there is an extra bonus to using this method, it will make your Jinja2 templates used in Ansible safer. Why? Read on!
+And there is an extra bonus to using this method, it will make your
+Jinja2 templates used in Ansible safer. Why? Read on!
 
 ## Whitespace Control In Ansible
 
-As you probably already know Jinja2 templates are used quite heavily when doing network automation with Ansible. Most people will use Ansible's `template` module to do the rendering of templates. That module by default enables `trim_blocks` option but `lstrip_blocks` is turned off and needs to be enabled manually.
+As you probably already know Jinja2 templates are used quite heavily
+when doing network automation with Ansible. Most people will use Ansible's
+`template` module to do the rendering of templates. That module by
+default enables `trim_blocks` option but `lstrip_blocks`
+is turned off and needs to be enabled manually.
 
-We can assume that most users will use the `template` module with default options which means that using **indentation inside of the block** technique will increase safety of our templates and the rendered text.
+We can assume that most users will use the `template` module with
+default options which means that using **indentation inside of the block**
+technique will increase safety of our templates and the rendered text.
 
-For the above reasons I'd recommend applying this technique if you know your templates will be used in Ansible. You will greatly reduce risk of your templates having seemingly random whitespaces popping up in your configs and other documents.
+For the above reasons I'd recommend applying this technique
+if you know your templates will be used in Ansible. You will greatly
+reduce risk of your templates having seemingly random whitespaces
+popping up in your configs and other documents.
 
-I would also say that it's not a bad idea to always stick to this way of writing your blocks if you haven't yet mastered the arcane ways of Jinja2. There are no real downsides of writing your templates this way.
+I would also say that it's not a bad idea to always stick to this
+way of writing your blocks if you haven't yet mastered the arcane ways
+of Jinja2. There are no real downsides of writing your templates this way.
 
-The only side effect here is how visually templates present themselves, with a lot of blocks templates looking “busy”. This could make it difficult to see lines of text between the blocks since these need to have indentation matching your intent.
+The only side effect here is how visually templates present themselves,
+with a lot of blocks templates looking “busy”. This could make it difficult
+to see lines of text between the blocks since these need to have
+indentation matching your intent.
 
-Personally I always try to use indentation within blocks method in templates meant for Ansible. For other templates, when rendered with Python, I do whatever feels right in terms of readability, and I render all templates with block trimming and stripping enabled.
+Personally I always try to use indentation within blocks method
+in templates meant for Ansible. For other templates,
+when rendered with Python, I do whatever feels right in terms of readability,
+and I render all templates with block trimming and stripping enabled.
 
 ## Example Playbooks
 
-For completeness sake, I built two short Ansible Playbooks, one uses default setting for `template` module while the other enables `lstrip` option.
+For completeness sake, I built two short Ansible Playbooks, one uses
+default setting for `template` module while the other enables `lstrip` option.
 
-We'll be using the same template and data we used for testing `trim` and `lstrip` options previously.
+We'll be using the same template and data we used for testing `trim`
+and `lstrip` options previously.
 
 Playbook using default settings, i.e. only `trim` is turned on:
 
@@ -2710,7 +2954,9 @@ And rendering results:
     # All ACLs have been generated
 
 
-If you recall, we got exactly same result when rendering this template in Python with `trim` option enabled. Again, indentations are misaligned so we need to do better.
+If you recall, we got exactly same result when rendering this template
+in Python with `trim` option enabled. Again, indentations
+are misaligned so we need to do better.
 
 Playbook enabling `lstrip`:
 
@@ -2745,9 +2991,11 @@ Rendered text:
     # All ACLs have been generated
 
 
-And again, same result as when you enabled `trim` and `lstrip` when rendering Jinja2 in Python.
+And again, same result as when you enabled `trim` and `lstrip`
+when rendering Jinja2 in Python.
 
-Finally, let's run the first Playbook, with default setting, using the template with indentation inside of blocks.
+Finally, let's run the first Playbook, with default setting,
+using the template with indentation inside of blocks.
 
 Playbook:
 
@@ -2781,19 +3029,35 @@ Result:
     # All ACLs have been generated
 
 
-So, we didn't have to enable `lstrip` option to get the same, perfect, result. Hopefully now you can see why I recommend using indentation within blocks as the default for Ansible templates. This gives you more confidence that your templates will be rendered the way you wanted them with default settings.
+So, we didn't have to enable `lstrip` option to get the same, perfect,
+result. Hopefully now you can see why I recommend using indentation
+within blocks as the default for Ansible templates.
+This gives you more confidence that your templates will be
+rendered the way you wanted them with default settings.
 
 ## Closing Thoughts
 
-When I sat down to write this post I thought I knew how whitespaces in Jinja2 work. But it turns out that some behaviour was not so clear to me. It was especially true for manual stripping with `-` sign, I keep forgetting that all of the whitespaces before/after the block are stripped, not just the ones on the line with block.
+When I sat down to write this post I thought I knew how whitespaces
+in Jinja2 work. But it turns out that some behaviour was not so clear
+to me. It was especially true for manual stripping with `-` sign,
+I keep forgetting that all of the whitespaces before/after the block are
+stripped, not just the ones on the line with block.
 
-So my advice is this: use trimming and stripping options whenever possible and generally favour indentation within blocks over indentation outside. And spend some time learning how Jinja2 generates whitespaces, that will allow you to take full control over your templates when you need it.
+So my advice is this: use trimming and stripping options whenever
+possible and generally favour indentation within blocks over
+indentation outside. And spend some time learning how Jinja2 generates
+whitespaces, that will allow you to take full control over your
+templates when you need it.
 
-And that's it, I hope you found this post useful and I look forward to seeing you again!
+And that's it, I hope you found this post useful and
+I look forward to seeing you again!
 
 # Jinja2 Tutorial - Part 4 - Template Filters
 
-This is part 4 of Jinja2 tutorial where we continue looking at the language features, specifically we'll be discussing template filters. We'll see what filters are and how we can use them in our templates. I'll also show you how you can write your own custom filters.
+This is part 4 of Jinja2 tutorial where we continue looking at
+the language features, specifically we'll be discussing template filters.
+We'll see what filters are and how we can use them in our templates.
+I'll also show you how you can write your own custom filters.
 
 
 ## Contents
@@ -2828,7 +3092,8 @@ This is part 4 of Jinja2 tutorial where we continue looking at the language feat
 
 ## Overview Of Jinja2 Filters
 
-Let's jump straight in. Jinja2 filter is something we use to transform data held in variables. We apply filters by placing pipe symbol `|` after the variable followed by name of the filter.
+Let's jump straight in. Jinja2 filter is something we use to transform
+data held in variables. We apply filters by placing pipe symbol `|` after the variable followed by name of the filter.
 
 Filters can change the look and format of the source data, or even generate new data derived from the input values. What's important is that the original data is replaced by the result of transformations and that's what ends up in rendered templates.
 
