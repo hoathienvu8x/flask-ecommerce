@@ -10,6 +10,7 @@ sqlfile="`date +"%Y-%m-%d_%H%M%S"`.sql"
 cd $backupdir
 
 # echo -ne ".out $backupdir/$sqlfile\n.mode insert\n.dump\n.exit" | sqlite3 $rootdir/app/ecommerce.db
+# https://stackoverflow.com/a/43398520
 echo -ne ".mode insert\n.dump\n.exit" | sqlite3 $rootdir/app/ecommerce.db | gzip -c > $backupdir/$sqlfile.gz
 
 exit
