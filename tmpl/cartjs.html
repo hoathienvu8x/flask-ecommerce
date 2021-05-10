@@ -1,0 +1,64 @@
+{% if cookie_cart %}
+<script>
+/* https://stackoverflow.com/a/24103596 */
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {   
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+document.addEventListener("DOMContentLoaded", function(e) {
+    document.querySelectorAll('a.addtocart').forEach(function(ele) {
+        ele.addEventListener('click', function(e) {
+            e.preventDefault();
+            var cookie = getCookie('{{ cookie_cart }}') || '';
+            var items = (function(a) {
+                var obj = {};
+                for(var i in a) {
+                    var x = a[i].trim().split(':');
+                    if (x.length != 2) continue;
+                    obj[x[0]] = Number(x[1])
+                }
+                return obj;
+            })(cookie.split(','));
+            var obj = e.target.dataset;
+            if (obj.id) {
+                if (items.hasOwnProperty(obj.id)) {
+                    var qty = items[obj.id];
+                    if (isNaN(qty) || qty < 0) {
+                        qty = 0;
+                    }
+                    qty++;
+                    items[obj.id] = qty;
+                } else {
+                    items[obj.id] = 1;
+                }
+                var arr = [];
+                for(var k in items) {
+                    arr.push(k+':'+items[k].toString());
+                }
+                setCookie('{{ cookie_cart }}', arr.join(','), 365);
+                e.target.innerText = 'Added !';
+            }
+            return false;
+        }, false);
+    });
+}, false);
+</script>
+{% endif %}
