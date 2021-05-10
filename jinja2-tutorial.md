@@ -1,16 +1,10 @@
 # Jinja2 Tutorial - Part 1 - Introduction And Variable Substitution
 
-This post is the first of the Jinja tutorial series where I'll provide an overview of the language, discussion of its features and a healthy dose of example use cases. If you're new to the world of templating, know what templates are but never used Jinja before, or simply need to refresh your memory, then you should found this series useful.
-
-## Jinja2 Tutorial Series
-
-- Jinja2 Tutorial - Part 1 - Introduction and variable substitution
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
+This post is the first of the Jinja tutorial series where I'll provide
+an overview of the language, discussion of its features and a healthy
+dose of example use cases. If you're new to the world of templating,
+know what templates are but never used Jinja before, or simply need
+to refresh your memory, then you should found this series useful.
 
 ## Contents
 
@@ -36,13 +30,21 @@ This post is the first of the Jinja tutorial series where I'll provide an overvi
 
 ## What Is Jinja2?
 
-Jinja2 is a feature rich templating language widely used in the Python ecosystem. It can be used directly in your Python programs and a lot of larger applications use it as their template rendering engine.
+Jinja2 is a feature rich templating language widely used in the Python
+ecosystem. It can be used directly in your Python programs and
+a lot of larger applications use it as their template rendering engine.
 
-Templating languages allow creation of text based documents where some of the content can be dynamically generated. Resulting files can be HTML, JSON, XML, or anything that uses pure text as the encoding. The idea is to capture business logic in the code while giving template designer tools to control flow and layout of the end document.
+Templating languages allow creation of text based documents where
+some of the content can be dynamically generated. Resulting files
+can be HTML, JSON, XML, or anything that uses pure text as the encoding.
+The idea is to capture business logic in the code while giving
+template designer tools to control flow and layout of the end document.
 
 ## Where Is It Used?
 
-Some notable examples of applications using Jinja2 are Ansible, Django, Flask, Salt and Trac. Many other Python web frameworks also use it as well as countless other Python projects.
+Some notable examples of applications using Jinja2 are Ansible, Django,
+Flask, Salt and Trac. Many other Python web frameworks also use it
+as well as countless other Python projects.
 
 ## What Is So Good About It?
 
@@ -58,37 +60,59 @@ Jinja2 comes with a lot of great features:
 - Easy to debug
 - Configurable syntax
 
-Discussions and example use of the above features will form large part of this series.
+Discussions and example use of the above features will form large
+part of this series.
 
 ## Why Would I Want To Use It?
 
-Web frameworks like Flask and Django, or automation ones like Ansible and Salt, provide out of the box support for Jinja. It's a natural choice for templating engine when using any of those. Ansible even uses a lot of the Jinja syntax in its Playbooks.
+Web frameworks like Flask and Django, or automation ones like Ansible
+and Salt, provide out of the box support for Jinja. It's
+a natural choice for templating engine when using any of those.
+Ansible even uses a lot of the Jinja syntax in its Playbooks.
 
-For your own programs, you should consider using Jinja2 if you have blocks of text that are dynamically generated from data structures. Not only will it logically separate your templates from your code, it will also allow others to make changes to the templates independently without having to modify source code of the application.
+For your own programs, you should consider using Jinja2 if you
+have blocks of text that are dynamically generated from data structures.
+Not only will it logically separate your templates from your code,
+it will also allow others to make changes to the templates
+independently without having to modify source code of the application.
 
-I think that having good knowledge of Jinja2 will allow you to become more productive. It's also ubiquitous in the world of network automation. With Jinja's widespread use you will find that it's worth investing your time into learning it.
+I think that having good knowledge of Jinja2 will allow you to become more
+productive. It's also ubiquitous in the world of network automation.
+With Jinja's widespread use you will find that it's worth
+investing your time into learning it.
 
 ## How Does It Work?
 
-Jinja2 essentially needs two source ingredients, template and data that will be used to render the final document.
+Jinja2 essentially needs two source ingredients, template and data
+that will be used to render the final document.
 
 ![j2-render-flow](ttl255/j2-render-flow-nofill.png)
 
-Jinja2 doesn't care where the data comes from, this could come from JSON returned by some API, be loaded from static YAML file, or simply be a Python Dict defined in our app.
+Jinja2 doesn't care where the data comes from, this could come from JSON
+returned by some API, be loaded from static YAML file,
+or simply be a Python Dict defined in our app.
 
-All that matters is that we have Jinja template and some data to render it with.
+All that matters is that we have Jinja template and some data
+to render it with.
 
 ## Jinja Templating Basics
 
-We now know what Jinja is and why would one use it. Time to start looking at simple examples to familiarize ourselves with the general look and structure of templates.
+We now know what Jinja is and why would one use it. Time to start
+looking at simple examples to familiarize ourselves with the general
+look and structure of templates.
 
-Basic idea behind templating is taking some text documents and figuring out which bits are unchanged among all instances and which can be parametrized. That is, we want some of the elements of the text to change depending on the data we have available at hand.
+Basic idea behind templating is taking some text documents and figuring
+out which bits are unchanged among all instances and which can be
+parametrized. That is, we want some of the elements of the text
+to change depending on the data we have available at hand.
 
-Since I mostly work with network device configs, this is what I'll be using in my examples.
+Since I mostly work with network device configs, this is what
+I'll be using in my examples.
 
 ## Variable Substitution
 
-Below is a short Cisco IOS configuration snippet which we'll use in our first example.
+Below is a short Cisco IOS configuration snippet which
+we'll use in our first example.
 
     hostname par-rtr-core-01
 
@@ -100,15 +124,30 @@ Below is a short Cisco IOS configuration snippet which we'll use in our first ex
     ntp server 0.pool.ntp.org prefer
     ntp server 1.pool.ntp.org
 
-First step that we need to take is to identify elements that are static and the ones that might change between devices.
+First step that we need to take is to identify elements that are static
+and the ones that might change between devices.
 
-In our case words like "hostname", "ip name-server" etc. are configuration statements used by particular network OS. These remain unchanged, as long as the same NOS is running on the device.
+In our case words like "hostname", "ip name-server" etc.
+are configuration statements used by particular network OS.
+These remain unchanged, as long as the same NOS is running on the device.
 
-The actual hostname, and possibly names of the name servers and ntp servers, should be turned into variables that will be substituted for actual values when template is rendered.
+The actual hostname, and possibly names of the name servers
+and ntp servers, should be turned into variables
+that will be substituted for actual values when template is rendered.
 
-Now, I said 'possibly' with regards to some of the elements because these decisions are specific to your environment. Generally, it's easier to parametrize these elements early on even if currently the same values are used everywhere. Over time our network might grow and some of the values might depend on the region or data center location which lends itself naturally to using variable reference. Or perhaps you want to change one of the name-servers, by parameterizing these values you only have to change them in one place followed by re-generation of the configs for all of the devices.
+Now, I said 'possibly' with regards to some of the elements
+because these decisions are specific to your environment.
+Generally, it's easier to parametrize these elements early on even if
+currently the same values are used everywhere.
+Over time our network might grow and some of the values might
+depend on the region or data center location which lends
+itself naturally to using variable reference.
+Or perhaps you want to change one of the name-servers,
+by parameterizing these values you only have to change them in one
+place followed by re-generation of the configs for all of the devices.
 
-For the sake of our example I decided to turn hostname, name-servers and ntp servers into variables. Our end template can be found below:
+For the sake of our example I decided to turn hostname, name-servers
+and ntp servers into variables. Our end template can be found below:
 
     hostname {{ hostname }}
 
@@ -120,15 +159,25 @@ For the sake of our example I decided to turn hostname, name-servers and ntp ser
     ntp server {{ ntp_server_pri }} prefer
     ntp server {{ ntp_server_sec }}
 
-In Jinja anything found between double opening and double closing curly braces tells the engine to evaluate and then print it. Here the only thing found between curly braces is a name, specifically a variable name. Jinja expects this variable to be provided to the engine by you and it simply takes the value referred by the variable replacing `{{ name }}` statement with that value.
+In Jinja anything found between double opening and double closing curly
+braces tells the engine to evaluate and then print it.
+Here the only thing found between curly braces is a name,
+specifically a variable name. Jinja expects this variable
+to be provided to the engine by you and it simply takes
+the value referred by the variable replacing `{{ name }}`
+statement with that value.
 
-In other words, Jinja just substitutes the variable name for its value. That is the most basic component you'll be using in your templates.
+In other words, Jinja just substitutes the variable name for its value.
+That is the most basic component you'll be using in your templates.
 
-Ok, so one thing gets replaced by the other. But how do we define the "thing" and how do we give it to Jinja engine?
+Ok, so one thing gets replaced by the other. But how do
+we define the "thing" and how do we give it to Jinja engine?
 
-This is where we need to choose a data format and tool that feeds the data to our template.
+This is where we need to choose a data format and tool that feeds
+the data to our template.
 
-There is quite a few options, with the below ones being the most commonly used.
+There is quite a few options, with the below ones being
+the most commonly used.
 
 For data format:
 
@@ -144,9 +193,15 @@ For glue, some of the options:
 
 ## Examples
 
-For most of my examples I'll be using various Python scripts and Ansible playbooks, with data coming from native Python dict as well as YAML and JSON files.
+For most of my examples I'll be using various Python scripts
+and Ansible playbooks, with data coming from native
+Python dict as well as YAML and JSON files.
 
-Here I'll use minimal Python script followed by Ansible playbook. Ansible example shows how easy it's to generate templates with little, or no, programming skills. You'll also be seeing Ansible a lot in the world of infrastructure automation so it's good to know how to use it for generating files with templates.
+Here I'll use minimal Python script followed by Ansible playbook.
+Ansible example shows how easy it's to generate templates with little,
+or no, programming skills. You'll also be seeing Ansible a lot
+in the world of infrastructure automation so it's good to know how
+to use it for generating files with templates.
 
 Python Example
 
@@ -188,15 +243,28 @@ And the output:
     ntp server 0.pool.ntp.org prefer
     ntp server 1.pool.ntp.org
 
-It worked wonderfully. Template was rendered with the data we provided to it.
+It worked wonderfully. Template was rendered with
+the data we provided to it.
 
-As you can see this really is quite simple, template is just some text with placeholders, data is a standard Python dictionary with each key name corresponding to the variable name in the template. We just need to create jinja2 Template object and pass our data to its render method.
+As you can see this really is quite simple, template is just some text
+with placeholders, data is a standard Python dictionary with
+each key name corresponding to the variable name in the template.
+We just need to create jinja2 Template object and pass our
+data to its render method.
 
-I should mention that the way we render Jinja in the above script should only be used for debugging and proof of concept code. In the real world data should come from external files or databases and templates should be loaded after we set up Jinja environment. I didn't want to muddy the waters early on as we'll dig deeper into these concepts a bit later.
+I should mention that the way we render Jinja in the above script
+should only be used for debugging and proof of concept code.
+In the real world data should come from external files or
+databases and templates should be loaded after we set up Jinja environment.
+I didn't want to muddy the waters early on as
+we'll dig deeper into these concepts a bit later.
 
 Ansible Example
 
-Just to show alternatives, we will also render the same template using Ansible. Here template is stored in a separate file and data comes from the host var file matching the name of the device, which is how we'd generally record per-host data.
+Just to show alternatives, we will also render the same
+template using Ansible. Here template is stored in a separate
+file and data comes from the host var file matching the name of the device,
+which is how we'd generally record per-host data.
 
 Below is the directory structure:
 
@@ -224,7 +292,8 @@ YAML file with data:
     ntp_server_pri: 0.pool.ntp.org
     ntp_server_sec: 1.pool.ntp.org
 
-Template is identical to the one used in Python example but it's stored in an external file:
+Template is identical to the one used in Python example but it's stored
+in an external file:
 
     (venv) przemek@quasar:~/nauto/jinja/ansible$ cat templates/base-cfg.j2
     hostname {{ hostname }}
@@ -263,7 +332,8 @@ All that's left is to execute our Playbook:
     PLAY RECAP ************************************************************************************************************************
     core-sw-waw-01 : ok=1 changed=1 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
 
-The result matches the output of Python script, except here we save the output to the file:
+The result matches the output of Python script, except here
+we save the output to the file:
 
     (venv) przemek@quasar:~/nauto/jinja/ansible$ cat out/core-sw-waw-01.cfg
     hostname core-sw-waw-01
@@ -276,13 +346,21 @@ The result matches the output of Python script, except here we save the output t
     ntp server 0.pool.ntp.org prefer
     ntp server 1.pool.ntp.org
 
-These examples are perhaps not overly exciting but with variable substitution alone we can create some useful templates. You can also see how little effort was required to get started with rendering templates in Ansible.
+These examples are perhaps not overly exciting but with variable
+substitution alone we can create some useful templates.
+You can also see how little effort was required
+to get started with rendering templates in Ansible.
 
 ## Dictionaries As Variables
 
-Let's continue with variable substitution but we'll use more complex data structure. This time we'll use variables that are dictionaries.
+Let's continue with variable substitution but
+we'll use more complex data structure.
+This time we'll use variables that are dictionaries.
 
-Using dictionaries (also called hash tables or objects) allows for logical grouping of related pieces of data. For instance, attributes related to an interface can be stored in a dictionary, here shown in JSON format:
+Using dictionaries (also called hash tables or objects) allows
+for logical grouping of related pieces of data.
+For instance, attributes related to an interface can be
+stored in a dictionary, here shown in JSON format:
 
     {
         "interface": {
@@ -295,11 +373,16 @@ Using dictionaries (also called hash tables or objects) allows for logical group
         }
     }
 
-Accessing items in dictionary is very convenient, you just need to know the key to get corresponding value, and hence are ubiquitous in the world of JSON and YAML.
+Accessing items in dictionary is very convenient, you just need
+to know the key to get corresponding value,
+and hence are ubiquitous in the world of JSON and YAML.
 
-Jinja gives a handy way of accessing dictionary keys using using "dot" notation. However this only works for keys that don't have special characters in the name.
+Jinja gives a handy way of accessing dictionary keys using
+using "dot" notation. However this only works for
+keys that don't have special characters in the name.
 
-Using above interface dictionary we could create interface config snippet using below template:
+Using above interface dictionary we could
+create interface config snippet using below template:
 
     interface {{ interface.name }}
     description {{ interface.description }}
@@ -317,11 +400,19 @@ And this is what we get once it's rendered:
     duplex full
     mtu 9124
 
-So that was pretty straightforward but already opens up more possibilities over using simple variables, especially for objects having multiple attributes.
+So that was pretty straightforward but already opens up more
+possibilities over using simple variables,
+especially for objects having multiple attributes.
 
-Now, remember that I mentioned that "dot" notation can't be used with keys having special characters in their names. If you have `.` - dot, `-` - dash, or anything else that is not allowed as a character in the Python variable name then you can't use dot notation. In these cases you need to use standard Python subscript notation `[]`. I find this mostly is a problem with keys that are IP addresses.
+Now, remember that I mentioned that "dot" notation can't be used with
+keys having special characters in their names. If you have `.` - dot,
+`-` - dash, or anything else that is not allowed as a character
+in the Python variable name then you can't use dot notation.
+In these cases you need to use standard Python subscript notation `[]`.
+I find this mostly is a problem with keys that are IP addresses.
 
-For instance to access the `10.0.0.0/24` key in the below dictionary we have to use Python subscripts:
+For instance to access the `10.0.0.0/24` key in the below
+dictionary we have to use Python subscripts:
 
     prefixes:
     10.0.0.0/24:
@@ -338,13 +429,24 @@ Template using the `10.0.0.0/24` key:
 
 ## Undefined Variables
 
-I feel like this is a good place to talk about what happens when Jinja encounters an undefined variable. This is actually relatively common when dealing with larger templates that use a lot of variables.
+I feel like this is a good place to talk about what happens
+when Jinja encounters an undefined variable. This is actually relatively
+common when dealing with larger templates that use a lot of variables.
 
-By default, when encountering an evaluation statement with undefined variable Jinja will replace it with an empty string. This often comes as a surprise to people writing their first templates.
+By default, when encountering an evaluation statement with undefined
+variable Jinja will replace it with an empty string.
+This often comes as a surprise to people writing their first templates.
 
-This behavior can be changed by setting argument `undefined`, taken by Template and Environment objects, to a different Jinja undefined type. Default type is `Undefined`, but there are other types available, `StrictUndefined` being the most useful one. By using `StrictUndefined` type we tell Jinja to raise error whenever there's an attempt at using undefined variable.
+This behavior can be changed by setting argument `undefined`,
+taken by Template and Environment objects, to a different Jinja
+undefined type. Default type is `Undefined`,
+but there are other types available, `StrictUndefined` being the most
+useful one. By using `StrictUndefined` type we tell Jinja
+to raise error whenever there's an attempt at using undefined variable.
 
-Compare the results of rendering the below template with provided data, first one using default `Undefined` type and second one using `StrictUndefined`:
+Compare the results of rendering the below template with provided data,
+first one using default `Undefined` type and
+second one using `StrictUndefined`:
 
     from jinja2 import Template
 
@@ -362,7 +464,8 @@ Compare the results of rendering the below template with provided data, first on
 
     Device waw-rtr-core-01 is a located in the warsaw-01 datacenter.
 
-Our template made reference to variable named `type` but data we provided does not have that var so the final evaluation results in an empty string.
+Our template made reference to variable named `type` but data we provided
+does not have that var so the final evaluation results in an empty string.
 
 Second run will use `StrictUndefined` type:
 
@@ -393,15 +496,29 @@ Second run will use `StrictUndefined` type:
 
 With strict error checking we get error straight away.
 
-It's worth noting that Ansible uses `StrictUndefined` by default so when you us it to render Jinja template you'll get errors whenever there's a reference to an undefined variable.
+It's worth noting that Ansible uses `StrictUndefined` by default
+so when you us it to render Jinja template you'll get errors
+whenever there's a reference to an undefined variable.
 
-Overall I suggest always enabling undefined type to `StrictUndefined`. If you don't do it you can get some very subtle bugs in your templates that will be difficult to find. At first it might be easy to understand why a value is missing in the output but over time, with templates growing larger, it's difficult for human eye to notice something is not right. You definitely don't want to be only realizing your templates are broken when loading config onto your devices!
+Overall I suggest always enabling undefined type to `StrictUndefined`.
+If you don't do it you can get some very subtle bugs in your templates
+that will be difficult to find. At first it might be easy to understand
+why a value is missing in the output but over time,
+with templates growing larger, it's difficult for human eye to notice
+something is not right. You definitely don't want to be only realizing
+your templates are broken when loading config onto your devices!
 
 ## Adding Comments
 
-Before we wrap this post up I just wanted to show you how to include comments in your templates. Generally templates should be self explanatory but comments come in handy when multiple people work on the same template and your future self will probably be grateful for explaining non-obvious bits as well. You can also use comment syntax to disable parts of the template during debugging.
+Before we wrap this post up I just wanted to show you how to include
+comments in your templates. Generally templates should be self
+explanatory but comments come in handy when multiple people work on the
+same template and your future self will probably be grateful
+for explaining non-obvious bits as well. You can also use comment
+syntax to disable parts of the template during debugging.
 
-Comments are added using `{# ... #}` syntax. That is anything between `{#` and `#}` is treated as a comment and will be ignored by the engine.
+Comments are added using `{# ... #}` syntax. That is anything between
+`{#` and `#}` is treated as a comment and will be ignored by the engine.
 
 Below is our first example with some comments added to it:
 
@@ -445,36 +562,29 @@ And the output:
     ntp server 1.pool.ntp.org
     ntp server
 
-No sign of comments. Though you might have noticed `-` (dash) character just before closing `#}`. Without that dash an extra empty line would have been added after each comment.
+No sign of comments. Though you might have noticed `-` (dash) character
+just before closing `#}`. Without that dash an extra empty line would
+have been added after each comment.
 
-Whitespace treatment in Jinja is not very intuitive and it's possibly one of the most confusing parts of the language. In one of the future posts I will discuss in detail different scenarios and techniques that will allow you to make your templates look exactly the way you want it.
+Whitespace treatment in Jinja is not very intuitive and it's possibly
+one of the most confusing parts of the language.
+In one of the future posts I will discuss in detail different
+scenarios and techniques that will allow you to make
+your templates look exactly the way you want it.
 
 ## Conclusion
 
-This concludes first post in the Jinja Tutorial series. What I showed you here should be enough to get you to start creating your own templates. In the future posts we'll have a look at other features and we'll work through examples illustrating use cases.
-
-Stay tuned!
-
-## References
-
-- Official documentation for the latest version of Jinja2 (2.11.x). Available at: [https://jinja.palletsprojects.com/en/2.11.x/](https://jinja.palletsprojects.com/en/2.11.x/)
-- Jinja2 Python library at PyPi. Available at: [https://pypi.org/project/Jinja2/](https://pypi.org/project/Jinja2/)
-- GitHub repo with source code for Jinja. Available at: [https://github.com/pallets/jinja/](https://github.com/pallets/jinja/)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p1-intro-substitution](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p1-intro-substitution)
+This concludes first post in the Jinja Tutorial series.
+What I showed you here should be enough to get you to start creating
+your own templates. In the future posts we'll have a look at
+other features and we'll work through examples illustrating use cases.
 
 # Jinja2 Tutorial - Part 2 - Loops And Conditionals
 
-Welcome to part 2 of my Jinja2 Tutorial. In part 1 we learned what Jinja2 is, what are its uses, and we started looking at templating basics. Coming up next are loops and conditionals, sprinkled with tests and a healthy dose of examples!
-
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- Jinja2 Tutorial - Part 2 - Loops and conditionals
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
+Welcome to part 2 of my Jinja2 Tutorial. In part 1 we learned
+what Jinja2 is, what are its uses, and we started looking
+at templating basics. Coming up next are loops and conditionals,
+sprinkled with tests and a healthy dose of examples!
 
 ## Contents
 
@@ -493,25 +603,38 @@ Welcome to part 2 of my Jinja2 Tutorial. In part 1 we learned what Jinja2 is, wh
 
 ## Control Structures
 
-In Jinja2 loops and conditionals come under name of control structures, since they affect flow of a program. Control structures use blocks enclosed by `{%` and `%}` characters.
+In Jinja2 loops and conditionals come under name of control structures,
+since they affect flow of a program.
+Control structures use blocks enclosed by `{%` and `%}` characters.
 
 ## Loops
 
 First of the structures we'll look at is loops.
 
-Jinja2 being a templating language has no need for wide choice of loop types so we only get `for` loop.
+Jinja2 being a templating language has no need for wide choice of
+loop types so we only get `for` loop.
 
-For loops start with `{% for my_item in my_collection %}` and end with `{% endfor %}`. This is very similar to how you'd loop over an iterable in Python.
+For loops start with `{% for my_item in my_collection %}` and
+end with `{% endfor %}`. This is very similar to
+how you'd loop over an iterable in Python.
 
-Here `my_item` is a loop variable that will be taking values as we go over the elements. And `my_collection` is the name of the variable holding reference to the iterated collection.
+Here `my_item` is a loop variable that will be taking values as
+we go over the elements. And `my_collection` is the name of 
+the variable holding reference to the iterated collection.
 
-Inside of the body of the loop we can use variable `my_item` in other control structures, like `if` conditional, or simply display it using `{{ my_item }}` statement.
+Inside of the body of the loop we can use variable `my_item` in
+other control structures, like `if` conditional,
+or simply display it using `{{ my_item }}` statement.
 
-Ok, but where would you use loops you ask? Using individual variables in your templates works fine for the most part but you might find that introducing hierarchy, and loops, will help with abstracting your data model.
+Ok, but where would you use loops you ask? Using individual variables
+in your templates works fine for the most part but you might find that
+introducing hierarchy, and loops, will help with abstracting your data model.
 
-For instance, prefix lists or ACLs are composed of a number of lines. It wouldn't make sense to have these lines represented as individual variables.
+For instance, prefix lists or ACLs are composed of a number of lines.
+It wouldn't make sense to have these lines represented as individual variables.
 
-Initially you could model a specific prefix list using one variable per line, like so:
+Initially you could model a specific prefix list using one variable
+per line, like so:
 
 
     PL_AS_65003_IN_line1: "permit 10.96.0.0/24"
@@ -545,7 +668,12 @@ Rendering results:
 
 This approach, while it works, has a few problems.
 
-If we wanted to have more lines in our prefix list we'd have to create another variable, and then another one, and so on. We not only have to add these new items to our data structure, templates would also have to have all of these new variables included individually. This is not maintainable, consumes a lot of time and is very error prone.
+If we wanted to have more lines in our prefix list we'd have
+to create another variable, and then another one, and so on.
+We not only have to add these new items to our data structure,
+templates would also have to have all of these
+new variables included individually. This is not maintainable,
+consumes a lot of time and is very error prone.
 
 There is a better way, consider the below data structure:
 
@@ -577,19 +705,36 @@ After rendering:
     permit 10.100.5.0/25
     permit 10.100.6.128/25
 
-If you look closely you'll notice this is essentially modeling the same thing, a prefix list with a number of entries. But by using list we clearly state our intent. Even visually you can tell straight away that all of the indented lines belong to the PL_AS_65003_IN.
+If you look closely you'll notice this is essentially modeling
+the same thing, a prefix list with a number of entries.
+But by using list we clearly state our intent.
+Even visually you can tell straight away that all
+of the indented lines belong to the PL_AS_65003_IN.
 
-Adding to the prefix list here is simple, we just need to append a new line to the block. Also, our templates don't have to change at all. If we used loop to iterate, like we did here, over this list then the new lines will be picked up if we re-run the rendering. Small change but makes things a lot easier.
+Adding to the prefix list here is simple, we just need to append
+a new line to the block. Also, our templates don't have to change at all.
+If we used loop to iterate, like we did here, over this list then
+the new lines will be picked up if we re-run the rendering.
+Small change but makes things a lot easier.
 
-You might have noticed that there's still room for improvement here. Name of the prefix list is hardcoded in the prefix list definition and in our `for` loop. Fear not, that's something we'll be improving upon shortly.
+You might have noticed that there's still room for improvement here.
+Name of the prefix list is hardcoded in the prefix list definition
+and in our `for` loop. Fear not, that's something
+we'll be improving upon shortly.
 
 ## Looping Over Dictionaries
 
-Let's now see how we can loop over dictionaries. We will again use `for` loop construct, remember, that's all we've got!
+Let's now see how we can loop over dictionaries. We will again
+use `for` loop construct, remember, that's all we've got!
 
-We can use the same syntax we used for iterating over elements of the list but here we'll iterate over dictionary keys. To retrieve value assigned to the key we need to use subscript, i.e. `[]`, notation.
+We can use the same syntax we used for iterating over elements of
+the list but here we'll iterate over dictionary keys.
+To retrieve value assigned to the key 
+we need to use subscript, i.e. `[]`, notation.
 
-One advantage of using dictionaries over lists is that we can use names of elements as a reference, this makes retrieving objects and their values much easier.
+One advantage of using dictionaries over lists is that we can use names
+of elements as a reference, this makes retrieving
+objects and their values much easier.
 
 Say we used list to represent our collection of interfaces:
 
@@ -602,11 +747,18 @@ Say we used list to represent our collection of interfaces:
     ipv4_address: 10.50.0.2/31
 
 
-There is no easy way of retrieving just `Ethernet2` entry. We would either have to iterate over all elements and do key name comparison or we'd have to resort to advanced filters.
+There is no easy way of retrieving just `Ethernet2` entry.
+We would either have to iterate over all elements and
+do key name comparison or we'd have to resort to advanced filters.
 
-One thing to note, and this is hopefully becoming apparent, is that we need to spend some time modeling our data so that it's easy to work with. This is something you will rarely get right on your first attempt so don't be afraid to experiment and iterate.
+One thing to note, and this is hopefully becoming apparent,
+is that we need to spend some time modeling our data
+so that it's easy to work with. This is something you will rarely get
+right on your first attempt so don't be afraid to experiment and iterate.
 
-Following with our example, we can keep data on individual interfaces assigned to keys in `interfaces` dictionary, instead of having them in a list:
+Following with our example, we can keep data on individual interfaces
+assigned to keys in `interfaces` dictionary,
+instead of having them in a list:
 
     interfaces:
     Ethernet1:
@@ -636,9 +788,12 @@ Giving us end result:
     ip address 10.50.0.2/31
 
 
-Here `intf` refers to `Ethernet1` and `Ethernet2` keys. To access attributes of each interface we need to use `interfaces[intf]` notation.
+Here `intf` refers to `Ethernet1` and `Ethernet2` keys. To access
+attributes of each interface we need to use `interfaces[intf]` notation.
 
-There is another way of iterating over dictionary, which I personally prefer. We can retrieve key and its value at the same time by using `items()` method.
+There is another way of iterating over dictionary, which I personally
+prefer. We can retrieve key and its value
+at the same time by using `items()` method.
 
 
     {% for iname, idata in interfaces.items() -%}
@@ -648,11 +803,15 @@ There is another way of iterating over dictionary, which I personally prefer. We
     {% endfor %}
 
 
-The end result is the same but by using `items()` method we simplify access to the attributes. This becomes especially important if you want to recursively iterate over deeply nested dictionaries.
+The end result is the same but by using `items()` method we simplify
+access to the attributes. This becomes especially important
+if you want to recursively iterate over deeply nested dictionaries.
 
-I also promised to show how prefix list example can be improved upon, and that's where `items()` comes in.
+I also promised to show how prefix list example can be improved upon,
+and that's where `items()` comes in.
 
-We make small modification to our data structure by making each prefix list name a key int the dictionary `prefix_lists`
+We make small modification to our data structure by making
+each prefix list name a key int the dictionary `prefix_lists`
 
 
     prefix_lists:
@@ -688,11 +847,20 @@ Rendering gives us the same result:
     permit 10.100.6.128/25
 
 
-And here you go, no more hardcoded references to the prefix list names! If you need another prefix list you just need to add it to the `prefix_lists` dictionary and it will be picked up automatically by our `for` loop.
+And here you go, no more hardcoded references to the prefix list names!
+If you need another prefix list you just need to add it
+to the `prefix_lists` dictionary and
+it will be picked up automatically by our `for` loop.
 
-_Note:_ If you're using version of Python < 3.6 then dictionaries are not ordered. That means order in which you recorded your data might differ from the order in which items will be processed inside of a template.
+_Note:_ If you're using version of Python < 3.6 then dictionaries
+are not ordered. That means order in which you recorded
+your data might differ from the order in which
+items will be processed inside of a template.
 
-If you rely on the order in which they've been recorded you should either use `collections.OrderedDict` if using Jinja2 in Python script, or you can apply `dictsort` filter in your template to order your dictionary by key or value.
+If you rely on the order in which they've been recorded you should
+either use `collections.OrderedDict` if using Jinja2 in Python script,
+or you can apply `dictsort` filter in your template
+to order your dictionary by key or value.
 
 To sort by key:
 
@@ -706,23 +874,37 @@ To sort by value:
     {% for k, v in my_dict | dictsort(by='value') -%}
 
 
-This concludes basics of looping in Jinja2 templates. The above use cases should cover 95% of your needs.
+This concludes basics of looping in Jinja2 templates.
+The above use cases should cover 95% of your needs.
 
-If you're looking for discussion of some advanced features connected to looping, rest assured I will be doing write up on those as well. I decided to leave more in depth Jinja2 topics for the final chapters of this tutorial and focus on the core stuff that lets you become productive quicker.
+If you're looking for discussion of some advanced features
+connected to looping, rest assured I will be doing write up
+on those as well. I decided to leave more in depth Jinja2 topics
+for the final chapters of this tutorial and focus
+on the core stuff that lets you become productive quicker.
 
 ## Conditionals And Tests
 
 Now that we're done with loops it's time to move on to conditionals.
 
-Jinja2 implements one type of conditional statement, the `if` statement. For branching out we can use `elif` and `else`.
+Jinja2 implements one type of conditional statement,
+the `if` statement. For branching out we can use `elif` and `else`.
 
-Conditionals in Jinja2 can be used in a few different ways. We'll now have a look at some use cases and how they combine with other language features.
+Conditionals in Jinja2 can be used in a few different ways.
+We'll now have a look at some use cases and how they
+combine with other language features.
 
 ## Comparisons
 
-First thing we look at is comparing values with conditionals, these make use of `==, !=, >, >=, <, <=` operators. These are pretty standard but I will show some examples nonetheless.
+First thing we look at is comparing values with conditionals,
+these make use of `==, !=, >, >=, <, <=` operators.
+These are pretty standard but I will show some examples nonetheless.
 
-One common scenario where comparison is used is varying command syntax based on the version, or vendor, of the installed OS. For instance some time ago Arista had to change a number of commands due to the lawsuit and we could use a simple if statement to make sure our templates work with all of the EOS versions:
+One common scenario where comparison is used is varying command
+syntax based on the version, or vendor, of the installed OS.
+For instance some time ago Arista had to change a number of commands
+due to the lawsuit and we could use a simple
+if statement to make sure our templates work with all of the EOS versions:
 
 Template, vars, and rendered template for host using EOS 4.19:
 
@@ -786,9 +968,13 @@ And same for device running EOS 4.22:
     Detected EOS ver 4.22, using new command syntax.
 
 
-Quite simple really yet very useful. All we did is check if recorded EOS version is less than, or greater/equal than 4.22, and this is enough to make sure correct syntax makes it to the configs.
+Quite simple really yet very useful. All we did is check if recorded
+EOS version is less than, or greater/equal than 4.22,
+and this is enough to make sure correct syntax makes it to the configs.
 
-To show more complex branching with comparisons I've got here na example of template supporting multiple routing protocols where only relevant config is generated for each device.
+To show more complex branching with comparisons I've got here na example
+of template supporting multiple routing protocols
+where only relevant config is generated for each device.
 
 First we define some data for hosts.
 
@@ -835,7 +1021,8 @@ Device with default route only:
     default_nh: 10.10.0.1
 
 
-Then we create a template using conditionals with branching. Additional protocols choices can be easily added as needed.
+Then we create a template using conditionals with branching.
+Additional protocols choices can be easily added as needed.
 
 
     hostname {{ hostname }}
@@ -894,13 +1081,16 @@ Rendering results for all devices:
     ip route 0.0.0.0/0 10.10.0.1
 
 
-So there you have it, one template supporting 3 different configuration options, pretty cool.
+So there you have it, one template supporting 3 different
+configuration options, pretty cool.
 
 ## Logical Operators
 
-No implementation of conditionals would be complete without logical operators. Jinja2 provides these in the form of `and`, `or` and `not`.
+No implementation of conditionals would be complete without logical
+operators. Jinja2 provides these in the form of `and`, `or` and `not`.
 
-There is not an awful lot to talk about here so here's just a short example showing all of these in action:
+There is not an awful lot to talk about here so here's
+just a short example showing all of these in action:
 
 
     (venv) przemek@quasar:~/nauto/jinja/python$ python j2_render.py \
@@ -942,9 +1132,13 @@ There is not an awful lot to talk about here so here's just a short example show
 
 ## Truthiness
 
-This is is a good place to look at different variable types and their truthiness. As is the case in Python, strings, lists, dictionaries, etc., variables evaluate to True if they're not empty. For empty values evaluation results in False.
+This is is a good place to look at different variable types and their
+truthiness. As is the case in Python, strings, lists, dictionaries, etc.,
+variables evaluate to True if they're not empty.
+For empty values evaluation results in False.
 
-I created an example illustrating thruthiness of, non-empty and empty, string, list and dictionary:
+I created an example illustrating thruthiness of, non-empty
+and empty, string, list and dictionary:
 
 
     (venv) przemek@quasar:~/nauto/jinja/python$ python j2_render.py \
@@ -999,25 +1193,44 @@ I created an example illustrating thruthiness of, non-empty and empty, string, l
     My empty string has bool value of: False
 
 
-Personally I would advise against testing non-boolean types for truthiness. There aren't that many cases where this could be useful and it might make your intent non-obvious. If you simply want to check if the variable exists then `is defined` test, which we'll look at shortly, is usually a better choice.
+Personally I would advise against testing non-boolean types for truthiness.
+There aren't that many cases where this could be useful and
+it might make your intent non-obvious. If you simply want to check
+if the variable exists then `is defined` test,
+which we'll look at shortly, is usually a better choice.
 
 ## Tests
 
-Tests in Jinja2 are used with variables and return True or False, depending on whether the value passes the test or not. To use this feature add `is` and test name after the variable.
+Tests in Jinja2 are used with variables and return True or False,
+depending on whether the value passes the test or not.
+To use this feature add `is` and test name after the variable.
 
-The most useful test is `defined` which I already mentioned. This test simply checks if given variable is defined, that is if rendering engine can find it in the data it received.
+The most useful test is `defined` which I already mentioned.
+This test simply checks if given variable is defined, that is
+if rendering engine can find it in the data it received.
 
-Checking if variable is defined is something I use in most of my templates. Remember that by default undefined variables will simply evaluate to an empty string. By checking if variable is defined before its intended use you make sure that your template fails during rendering. Without this test you could end with incomplete document and no indication that something is amiss.
+Checking if variable is defined is something I use in most of my templates.
+Remember that by default undefined variables will simply evaluate
+to an empty string. By checking if variable is defined before its intended
+use you make sure that your template fails during rendering.
+Without this test you could end with incomplete document
+and no indication that something is amiss.
 
-Another family of tests that I find handy are used for checking type of the variable. Certain operations require both operands to be of the same type, if they're not Jinja2 will throw an error. This applies to things like comparing numbers or iterating over lists and dictionaries.
+Another family of tests that I find handy are used for checking type
+of the variable. Certain operations require both operands
+to be of the same type, if they're not Jinja2 will throw an error.
+This applies to things like comparing numbers
+or iterating over lists and dictionaries.
 
 `boolean` - check is variable is a boolean
 `integer` - check if variable is an integer
 `float` - check if variable is a float
-`number` - check if variable is number, will return True for both integer and float
+`number` - check if variable is number, will return True for
+both integer and float
 `string` - check if variable is a string
 `mapping` - check if variable is a mapping, i.e. dictionary
-`iterable` - check if variable can be iterated over, will match string, list, dict, etc.
+`iterable` - check if variable can be iterated over,
+will match string, list, dict, etc.
 `sequence` - check if variable is a sequence
 
 Below is an example of some variables having these tests applied:
@@ -1092,7 +1305,11 @@ Below is an example of some variables having these tests applied:
     ['1.1.1.1', '8.8.4.4', '8.8.8.8'] is a mapping: False
 
 
-You might've noticed that some of these tests might seem a bit ambiguous. For instance to test if variable is a list it is not enough to check if it's a sequence or an iterable. Strings also are both sequences and iterables. So are the dictionaries, even though vanilla Python classes them as Iterable and Mapping but not Sequence:
+You might've noticed that some of these tests might seem a bit ambiguous.
+For instance to test if variable is a list it is not enough to check
+if it's a sequence or an iterable. Strings also are both sequences
+and iterables. So are the dictionaries, even though vanilla Python
+classes them as Iterable and Mapping but not Sequence:
 
 
     >>> from collections.abc import Iterable, Sequence, Mapping
@@ -1107,14 +1324,21 @@ You might've noticed that some of these tests might seem a bit ambiguous. For in
     True
 
 
-So what all of this means? Well, I suggest the following tests for each type of variable:
+So what all of this means? Well, I suggest the following tests
+for each type of variable:
 
-- Number, Float, Integer - these work just as expected, so choose whatever fits your use case.
+- Number, Float, Integer - these work just as expected,
+so choose whatever fits your use case.
 - Strings - it's enough to use `string` test: `{{ my_string is string }}`
 - Dictionary - using `mapping` test is sufficient: `{{ my_dict is mapping }}`
-- Lists - this is a tough one, full check should tests if variable is a sequence but at the same time it cannot be a mapping or a string: `{{ my_list is sequence and my list is not mapping and my list is not string }}`
+- Lists - this is a tough one, full check should tests
+if variable is a sequence but at the same time it cannot be a mapping
+or a string: `{{ my_list is sequence and my list is not mapping and my list is not string }}`
 
-In some cases we know dictionary, or a string, is unlikely to appear so we can shorten the check by getting rid of `mapping` or `string` test: `{{ my_list is sequence and my list is not string }}` `{{ my_list is sequence and my list is not mapping }}`
+In some cases we know dictionary, or a string, is unlikely to appear
+so we can shorten the check by getting rid of `mapping` or `string`
+test: `{{ my_list is sequence and my list is not string }}`
+`{{ my_list is sequence and my list is not mapping }}`
 
 For the full list of available tests follow the link in [References](#references).
 
@@ -1122,9 +1346,11 @@ For the full list of available tests follow the link in [References](#references
 
 Last thing I wanted to touch on briefly are loop filtering and `in` operator.
 
-Loop filtering does exactly what its name implies. It allows you to use `if` statement with `for` loop to skip elements that you're not interested in.
+Loop filtering does exactly what its name implies. It allows you to use
+`if` statement with `for` loop to skip elements that you're not interested in.
 
-We could for instance loop over dictionary containing interfaces and process only the ones that have IP addresses:
+We could for instance loop over dictionary containing interfaces and
+process only the ones that have IP addresses:
 
 
     (venv) przemek@quasar:~/nauto/jinja/python$ python j2_render.py \
@@ -1182,17 +1408,28 @@ We could for instance loop over dictionary containing interfaces and process onl
     Ethernet52 - leaf02-eth51: 10.50.0.2/31
 
 
-As you can see we have 6 interfaces in total but only 4 of them have IP addresses assigned. With `is defined` test added to the loop we filter out interfaces with no IP addresses.
+As you can see we have 6 interfaces in total but only 4 of them have
+IP addresses assigned. With `is defined` test added to
+the loop we filter out interfaces with no IP addresses.
 
-Loop filtering can be especially powerful when iterating over large payload returned from the device. In some cases you can ignore most of the elements and focus on things that are of interest.
+Loop filtering can be especially powerful when iterating over
+large payload returned from the device. In some cases you can ignore
+most of the elements and focus on things that are of interest.
 
 ## In Operator
 
-`in` operator which is placed between two values can be used to check if value on the left is contained in the value on the right one. You can use it to test if an element appears in the list or if a key exists in a dictionary.
+`in` operator which is placed between two values can be used to check
+if value on the left is contained in the value on the right one.
+You can use it to test if an element appears in the list or
+if a key exists in a dictionary.
 
-The obvious use cases for `in` operator is to check if something we're interested in just exists in a collection, we don't necessarily need to retrieve the item.
+The obvious use cases for `in` operator is to check if something we're
+interested in just exists in a collection,
+we don't necessarily need to retrieve the item.
 
-Looking at the previous example, we could check if Loopback0 is in the list interfaces, and if it does, we will use it to source Management Plane packets, if not we'll use Management1 interface.
+Looking at the previous example, we could check if Loopback0 is in
+the list interfaces, and if it does, we will use it
+to source Management Plane packets, if not we'll use Management1 interface.
 
 Template:
 
@@ -1216,37 +1453,34 @@ Rendering results:
     ip radius source-interface Loopback0
 
 
-Notice that even though `interfaces` is a dictionary containing a lot of data we didn't iterate over it or retrieve any of the keys. All we wanted to know was the presence of `Loopback0` key.
+Notice that even though `interfaces` is a dictionary containing
+a lot of data we didn't iterate over it or retrieve any of the keys.
+All we wanted to know was the presence of `Loopback0` key.
 
-To be completely honest, the above template could use some tweaking, we essentially duplicated 3 lines of config and hardcoded interface names. That's not a very good practice, and I'll show you in the next post how we can make improvements here.
+To be completely honest, the above template could use some tweaking,
+we essentially duplicated 3 lines of config and hardcoded interface names.
+That's not a very good practice, and I'll show you in
+the next post how we can make improvements here.
 
-And with that we've come to the end of part 2 of the Jinja2 tutorial. Next I'll cover whitespaces, so you can make your documents look just right, and we'll continue looking at the language features. I hope you learned something useful here and do come back for more!
-
-## References
-
-- Official documentation for the latest version of Jinja2 (2.11.x). Available at: [https://jinja.palletsprojects.com/en/2.11.x/](https://jinja.palletsprojects.com/en/2.11.x/)
-- Jinja2 built-in tests. Available at: [https://jinja.palletsprojects.com/en/2.11.x/templates/#list-of-builtin-tests](https://jinja.palletsprojects.com/en/2.11.x/templates/#list-of-builtin-tests)
-- Jinja2 Python library at PyPi. Available at: [https://pypi.org/project/Jinja2/](https://pypi.org/project/Jinja2/)
-- GitHub repo with source code for Jinja. Available at: [https://github.com/pallets/jinja/](https://github.com/pallets/jinja/)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p2-loops-conditionals](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p2-loops-conditionals)
+And with that we've come to the end of part 2 of the Jinja2 tutorial.
+Next I'll cover whitespaces, so you can make your documents look just right,
+and we'll continue looking at the language features.
+I hope you learned something useful here and do come back for more!
 
 # Jinja2 Tutorial - Part 3 - Whitespace Control
 
-Text documents are the final result of rendering templates. Depending on the end consumer of these documents whitespace placement could be significant. One of the major niggles in Jinja2, in my opinion, is the way control statements and other elements affect whitespace output in the end documents.
+Text documents are the final result of rendering templates.
+Depending on the end consumer of these documents whitespace
+placement could be significant. One of the major niggles in Jinja2,
+in my opinion, is the way control statements and other elements affect
+whitespace output in the end documents.
 
-To put it bluntly, mastering whitespaces in Jinja2 is the only way of making sure your templates generate text exactly the way you intended.
+To put it bluntly, mastering whitespaces in Jinja2 is the only way
+of making sure your templates generate text exactly the way you intended.
 
-Now we know the importance of the problem, time to understand where it originates, to do that we'll have a look at a lot of examples. Then we'll learn how we can control rendering whitespaces in Jinja2 templates.
-
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- Jinja2 Tutorial - Part 3 - Whitespace control
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
+Now we know the importance of the problem, time to understand where
+it originates, to do that we'll have a look at a lot of examples.
+Then we'll learn how we can control rendering whitespaces in Jinja2 templates.
 
 ## Contents
 
@@ -1265,7 +1499,9 @@ Now we know the importance of the problem, time to understand where it originate
 
 ## Understanding Whitespace Rendering In Jinja2
 
-We'll start our learning by looking at how Jinja2 renders whitespaces by looking at trivial example, template with no variables, just two lines of text and a comment:
+We'll start our learning by looking at how Jinja2 renders whitespaces
+by looking at trivial example, template with no variables,
+just two lines of text and a comment:
 
 
     Starting line
@@ -1281,13 +1517,21 @@ This is how it looks like when it's rendered:
     Line after comment
 
 
-Ok, what happened here? Did you expect an empty line to appear in place of our comment? I did not. I'd expect the comment line to just disappear into nothingness, but that's not the case here.
+Ok, what happened here? Did you expect an empty line to appear
+in place of our comment? I did not. I'd expect the comment line to
+just disappear into nothingness, but that's not the case here.
 
-So here's a very important thing about Jinja2. All of the language blocks are removed when the template is rendered but **all** of the whitespaces remain in place. That is if there are spaces, tabs, or newlines, before or after, blocks, then these will be rendered.
+So here's a very important thing about Jinja2. All of the language blocks
+are removed when the template is rendered but **all** of the whitespaces
+remain in place. That is if there are spaces, tabs, or newlines,
+before or after, blocks, then these will be rendered.
 
-This explains why comment block left a blank line once template was rendered. There is a newline character after the `{# #}` block. While the block itself was removed, newline remained.
+This explains why comment block left a blank line once template was
+rendered. There is a newline character after the `{# #}` block.
+While the block itself was removed, newline remained.
 
-Below is a more involving, but fairly typical, template, containing `for` loop and `if` statements:
+Below is a more involving, but fairly typical, template,
+containing `for` loop and `if` statements:
 
 
     {% for iname, idata in interfaces.items() %}
@@ -1323,53 +1567,101 @@ And this is how Jinja2 will render this, with all settings left to defaults:
     ip address 10.50.0.0/31
 
 
-This doesn't look great, does it? There are extra newlines added in few places. Also, interestingly enough, there are leading spaces on some lines, that can't be seen on screen but could really break things for us in the future. Overall it's difficult to figure out where all of the whitespaces came from.
+This doesn't look great, does it? There are extra newlines added
+in few places. Also, interestingly enough, there are leading spaces
+on some lines, that can't be seen on screen but could really break things
+for us in the future. Overall it's difficult to figure out where
+all of the whitespaces came from.
 
-To help you in better visualizing generated text, here's the same output, but now with all of the whitespaces rendered:
+To help you in better visualizing generated text, here's the same output,
+but now with all of the whitespaces rendered:
 
 ![](ttl255/vis-ws-ex01.png)
 
-Each bullet point represents a space character, and return icon represents newlines. You should now clearly see leading spaces that were left by Jinja2 block on three of the lines, as well as all of the extra newlines.
+Each bullet point represents a space character, and return icon
+represents newlines. You should now clearly see leading spaces that were
+left by Jinja2 block on three of the lines, as well as all of the extra newlines.
 
-Ok, that's all great you say, but it still is not so obvious where these came from. The real question we want to answer is:
+Ok, that's all great you say, but it still is not so obvious where
+these came from. The real question we want to answer is:
 
 Which template line contributed to which line in the final result?
 
-To answer that question I rendered whitespaces in the template as well as the output text. Then I added colored, numbered, highlight blocks in the lines of interest, to allow us to match source with the end product.
+To answer that question I rendered whitespaces in the template as well
+as the output text. Then I added colored, numbered, highlight blocks
+in the lines of interest, to allow us to match source with the end product.
 
 ![](ttl255/ws-template-ex01-corr-24-12-2020.png)
 
 ![](ttl255/ws-render-ex01-collaps-24-12-2020.png)
 
-You should now see very easily where each of the Jinja blocks adds whitespaces to the resulting text.
+You should now see very easily where each of the Jinja blocks adds
+whitespaces to the resulting text.
 
 If you're also curious **why** then read on for detailed explanation:
 
-1. Line containing `{% for %}` block, number 1 with blue outlines, ends with a newline. This block gets executed for each key in dictionary. We have 2 keys, so we get extra 2 newlines inserted into final text.
-2. Line containing `{% if %}` block, numbers 2a and 2b with green and light-green outlines, has 2 leading spaces and ends with a newline. This is where things get interesting. The actual `{% if %}` block is removed leaving behind 2 spaces that always get rendered. But trailing newline is inside of the block. This means that with `{% if %}` evaluating to `false` we get 2a but NOT 2b. If it evaluates to `true` we get both 2a AND 2b.
-3. Line containing `{% endif %}` block, numbers 3a and 3b with red and orange outlines, has 2 leading spaces and ends with a newline. This is again interesting and our situation here is the reverse of previous case. Two leading spaces are inside of the `if` block, but the newline is outside of it. So 3b, newline, is always rendered. But when `{% if %}` block evaluates to `true` we also get 3a, if it's `false` then we get 3b only.
+1. Line containing `{% for %}` block, number 1 with blue outlines,
+ends with a newline. This block gets executed for each key in dictionary.
+We have 2 keys, so we get extra 2 newlines inserted into final text.
+2. Line containing `{% if %}` block, numbers 2a and 2b with green and
+light-green outlines, has 2 leading spaces and ends with a newline.
+This is where things get interesting. The actual `{% if %}` block
+is removed leaving behind 2 spaces that always get rendered.
+But trailing newline is inside of the block. This means that
+with `{% if %}` evaluating to `false` we get 2a but NOT 2b.
+If it evaluates to `true` we get both 2a AND 2b.
+3. Line containing `{% endif %}` block, numbers 3a and 3b with red and
+orange outlines, has 2 leading spaces and ends with a newline.
+This is again interesting and our situation here is the reverse of
+previous case. Two leading spaces are inside of the `if` block,
+but the newline is outside of it. So 3b, newline, is always rendered.
+But when `{% if %}` block evaluates to `true` we also get 3a,
+if it's `false` then we get 3b only.
 
-It's also worth pointing out that if your template continued after `{% endfor %}` block, that block would contribute one extra newline. But worry not, we'll have some examples later on illustrating this case.
+It's also worth pointing out that if your template continued
+after `{% endfor %}` block, that block would contribute one extra newline.
+But worry not, we'll have some examples later on illustrating this case.
 
-I hope you'll agree with me that the template we used in our example wasn't especially big or complicated, yet it resulted in a fair amount of additional whitespaces.
+I hope you'll agree with me that the template we used in our example
+wasn't especially big or complicated, yet it resulted in a fair
+amount of additional whitespaces.
 
-Luckily, and I couldn't stress enough how useful that is, there are ways of changing Jinja2 behavior and taking back control over exact look and feel of our text.
+Luckily, and I couldn't stress enough how useful that is, there are ways
+of changing Jinja2 behavior and taking back control
+over exact look and feel of our text.
 
-**Note**. The above explanation was updated on 12 Dec 2020. Previously 1st occurence of 3b was incorrectly attributed to 2b. Many thanks to Lawrr who triple-checked me and greatly helped in getting to the bottom of this!
+**Note**. The above explanation was updated on 12 Dec 2020.
+Previously 1st occurence of 3b was incorrectly attributed to 2b.
+Many thanks to Lawrr who triple-checked me and greatly helped
+in getting to the bottom of this!
 
 ## Finding Origin Of Whitespaces - Alternative Way
 
-We've talked a bit how to tame Jinja's engine with regards to whitespace generation. You also know that tools like [**J2Live**](https://j2live.ttl255.com) can help you in visualizing all the whitespaces in the produced text. But can we tell with certainty which template line, containing block, contributed these characters to the final render?
+We've talked a bit how to tame Jinja's engine with regards to
+whitespace generation. You also know that tools like [**J2Live**](https://j2live.ttl255.com) can help you in
+visualizing all the whitespaces in the produced text.
+But can we tell with certainty which template line, containing block,
+contributed these characters to the final render?
 
-To get answer to that question we can use a little trick. I came up with the following technique, that doesn't require any external tools, for matching whitespaces coming from template block lines with extraneous whitespaces appearing in the resulting text document.
+To get answer to that question we can use a little trick.
+I came up with the following technique, that doesn't require any
+external tools, for matching whitespaces coming from template
+block lines with extraneous whitespaces appearing in the resulting text document.
 
-This method is quite simple really, you just need to add unambiguous characters to each of the block lines in the template that correspond to lines in the rendered document.
+This method is quite simple really, you just need to add unambiguous
+characters to each of the block lines in the template that correspond
+to lines in the rendered document.
 
-I find it works especially well with template inheritance and macros, topics we will discuss in the upcoming parts of this tutorial.
+I find it works especially well with template inheritance and macros,
+topics we will discuss in the upcoming parts of this tutorial.
 
 ## Origin Of Whitespaces - Examples
 
-Let's see that secret sauce in action then. We'll place additional characters, carefully selected so that they stand out from surrounding text, in strategic places on the lines with Jinja2 blocks. I'm using the same template we already worked with so previously that you can easily compare the results.
+Let's see that secret sauce in action then. We'll place additional
+characters, carefully selected so that they stand out from surrounding
+text, in strategic places on the lines with Jinja2 blocks.
+I'm using the same template we already worked with so previously
+that you can easily compare the results.
 
 
     {% for iname, idata in interfaces.items() %}(1)
@@ -1396,11 +1688,18 @@ Final result:
     (3)
 
 
-I added `(1)`, `(2)` and `(3)` characters on the lines where we have Jinja2 blocks. The end result matches what we got back from J2Live with `Show whitespaces` option enabled.
+I added `(1)`, `(2)` and `(3)` characters on the lines where we have
+Jinja2 blocks. The end result matches what we got back from
+J2Live with `Show whitespaces` option enabled.
 
-If you don't have access to [**J2Live**](https://j2live.ttl255.com) or you need to troubleshoot whitespace placement in production templates, then I definitely recommend using this method. It's simple but effective.
+If you don't have access to [**J2Live**](https://j2live.ttl255.com) or
+you need to troubleshoot whitespace placement in production templates,
+then I definitely recommend using this method. It's simple but effective.
 
-Just to get more practice, I've added extra characters to slightly more complex template. This one has branching `if` statement and some text below final `endfor` to allow us to see what whitespaces come from that block.
+Just to get more practice, I've added extra characters to slightly more
+complex template. This one has branching `if` statement and some
+text below final `endfor` to allow us 
+to see what whitespaces come from that block.
 
 Our template:
 
@@ -1450,7 +1749,11 @@ End result:
     # All ACLs have been generated
 
 
-A lot is happening here but there are no mysteries anymore. You can easily match each source line with line in the final text. And knowing where the whitespaces are coming from is the first step to learning how to control them, which is what we're going to talk about shortly.
+A lot is happening here but there are no mysteries anymore.
+You can easily match each source line with line in the final text.
+And knowing where the whitespaces are coming from is the first step
+to learning how to control them,
+which is what we're going to talk about shortly.
 
 Also, for comparison is the rendered text without using `helper` characters:
 
@@ -1469,31 +1772,48 @@ Also, for comparison is the rendered text without using `helper` characters:
     # All ACLs have been generated
 
 
-If you're still reading this, congratulations! Your dedication to mastering whitespace rendering is commendable. Good news is that we're now getting to the bit where we learn how to control Jinja2 behavior.
+If you're still reading this, congratulations! Your dedication
+to mastering whitespace rendering is commendable.
+Good news is that we're now getting to the bit where
+we learn how to control Jinja2 behavior.
 
 ## Controlling Jinja2 Whitespaces
 
-There are broadly three ways in which we can control whitespace generation in our templates:
+There are broadly three ways in which we can control
+whitespace generation in our templates:
 
-1. Enable one of, or both, `trim_blocks` and `lstrip_blocks` rendering options.
-2. Manually strip whitespaces by adding a minus sign `-` to the start or end of the block.
+1. Enable one of, or both, `trim_blocks` and `lstrip_blocks`
+rendering options.
+2. Manually strip whitespaces by adding a minus sign `-`
+to the start or end of the block.
 3. Apply indentation inside of Jinja2 blocks.
 
-First, I'll give you an easy, by far more preferable, way of taming whitespace and then we'll dig into the more involving methods.
+First, I'll give you an easy, by far more preferable,
+way of taming whitespace and then we'll dig into the more involving methods.
 
 So here it comes:
 
 Always render with `trim_blocks` and `lstrip_blocks` options enabled.
 
-That's it, the big secret is out. Save yourself trouble and tell Jinja2 to apply trimming and stripping to all of the blocks.
+That's it, the big secret is out. Save yourself trouble and tell
+Jinja2 to apply trimming and stripping to all of the blocks.
 
-If you use Jinja2 as part of another framework then you might have to consult documentation to see what the default behaviour is and how it can be changed. Later in this post I will explain how we can control whitespaces when using Ansible to render Jinja2 templates.
+If you use Jinja2 as part of another framework then you might
+have to consult documentation to see what the default behaviour
+is and how it can be changed. Later in this post I will explain
+how we can control whitespaces when using Ansible to render Jinja2 templates.
 
-Just a few words of explanation on what these options do. Trimming removes newline after block while stripping removes all of spaces and tabs on the lines preceding the block. Now, if you enable trimming alone, you might still get some funny output if there are any leading whitespaces on the lines containing blocks, so that's why I recommend having both of these enabled.
+Just a few words of explanation on what these options do.
+Trimming removes newline after block while stripping
+removes all of spaces and tabs on the lines preceding the block.
+Now, if you enable trimming alone, you might still get some funny
+output if there are any leading whitespaces on the lines containing blocks,
+so that's why I recommend having both of these enabled.
 
 ## Trimming And Stripping In Action
 
-For example, this is what happens when we enable block trimming but leave block stripping disabled:
+For example, this is what happens when we enable block trimming but
+leave block stripping disabled:
 
 
     ip access-list extended al-hq-in
@@ -1503,7 +1823,9 @@ For example, this is what happens when we enable block trimming but leave block 
     # All ACLs have been generated
 
 
-That's the same example we just had a look at, and I'm sure you didn't expect this to happen at all. Let's add some extra characters to figure out what happened:
+That's the same example we just had a look at, and I'm sure you didn't
+expect this to happen at all.
+Let's add some extra characters to figure out what happened:
 
 
     {% for acl, acl_lines in access_lists.items() %}
@@ -1528,9 +1850,12 @@ That's the same example we just had a look at, and I'm sure you didn't expect th
     # All ACLs have been generated
 
 
-Another puzzle solved, we got rid of newlines with `trim_blocks` enabled but leading spaces in front of `if` and `elif` blocks remained. Something that is completely undesirable.
+Another puzzle solved, we got rid of newlines with `trim_blocks` enabled
+but leading spaces in front of `if` and `elif` blocks remained.
+Something that is completely undesirable.
 
-So how would this template render if we had both trimming and stripping enabled? Have a look:
+So how would this template render if we had both trimming and
+stripping enabled? Have a look:
 
 
     ip access-list extended al-hq-in
@@ -1540,13 +1865,19 @@ So how would this template render if we had both trimming and stripping enabled?
     # All ACLs have been generated
 
 
-Quite pretty right? This is what I meant when I talked about getting **intended** result. No surprises, no extra newlines or spaces, final text matches our expectations.
+Quite pretty right? This is what I meant when I talked about getting
+**intended** result. No surprises, no extra newlines or spaces,
+final text matches our expectations.
 
-Now, I said enabling trim and lstrip options is an easy way, but if for whatever reason you can't use it, or want to have total control over how whitespaces are generated on a per-block then we need to resort to manual control.
+Now, I said enabling trim and lstrip options is an easy way,
+but if for whatever reason you can't use it, or want to have total
+control over how whitespaces are generated on
+a per-block then we need to resort to manual control.
 
 ## Manual Control
 
-Jinja2 allows us to manually control generation of whitespaces. You do it by using a minus sing `-` to strip whitespaces from blocks, comments or variable expressions. You need to add it to the start or end of given expression to remove whitespaces before or after the block, respectively.
+Jinja2 allows us to manually control generation of whitespaces.
+You do it by using a minus sing `-` to strip whitespaces from blocks, comments or variable expressions. You need to add it to the start or end of given expression to remove whitespaces before or after the block, respectively.
 
 As always, it's best to learn from examples. We'll go back to example from the beginning of the post. First we render without any `-` signs added:
 
@@ -1850,12 +2181,6 @@ So my advice is this: use trimming and stripping options whenever possible and g
 
 And that's it, I hope you found this post useful and I look forward to seeing you again!
 
-## References:
-- Official documentation for the latest version of Jinja2 (2.11.x). Available at: [https://jinja.palletsprojects.com/en/2.11.x/](https://jinja.palletsprojects.com/en/2.11.x/)
-- Documentation for Ansible template module: [https://docs.ansible.com/ansible/latest/modules/template_module.html](https://docs.ansible.com/ansible/latest/modules/template_module.html)
-- Jinja2 Python library at PyPi. Available at: [https://pypi.org/project/Jinja2/](https://pypi.org/project/Jinja2/)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control)
-
 # Jinja2 Tutorial - Part 3 - Whitespace Control
 
 Text documents are the final result of rendering templates. Depending on the end consumer of these documents whitespace placement could be significant. One of the major niggles in Jinja2, in my opinion, is the way control statements and other elements affect whitespace output in the end documents.
@@ -1863,16 +2188,6 @@ Text documents are the final result of rendering templates. Depending on the end
 To put it bluntly, mastering whitespaces in Jinja2 is the only way of making sure your templates generate text exactly the way you intended.
 
 Now we know the importance of the problem, time to understand where it originates, to do that we'll have a look at a lot of examples. Then we'll learn how we can control rendering whitespaces in Jinja2 templates.
-
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- Jinja2 Tutorial - Part 3 - Whitespace control
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
 
 ## Contents
 
@@ -2476,26 +2791,10 @@ So my advice is this: use trimming and stripping options whenever possible and g
 
 And that's it, I hope you found this post useful and I look forward to seeing you again!
 
-## References:
-
-- Official documentation for the latest version of Jinja2 (2.11.x). Available at: [https://jinja.palletsprojects.com/en/2.11.x/](https://jinja.palletsprojects.com/en/2.11.x/)
-- Documentation for Ansible template module: [https://docs.ansible.com/ansible/latest/modules/template_module.html](https://docs.ansible.com/ansible/latest/modules/template_module.html)
-- Jinja2 Python library at PyPi. Available at: [https://pypi.org/project/Jinja2/](https://pypi.org/project/Jinja2/)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control)
-
 # Jinja2 Tutorial - Part 4 - Template Filters
 
 This is part 4 of Jinja2 tutorial where we continue looking at the language features, specifically we'll be discussing template filters. We'll see what filters are and how we can use them in our templates. I'll also show you how you can write your own custom filters.
 
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- Jinja2 Tutorial - Part 4 - Template filters
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
 
 ## Contents
 
@@ -3426,26 +3725,10 @@ You do need to remember to use them judiciously, if it starts looking unwieldy a
 
 That's all from me. As always, I look forward to seeing you again, more Jinja2 posts are coming soon!
 
-## References
-- Jinja2 built-in filters, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters](https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters)
-- Jinja2 custom filters, official docs: [https://jinja.palletsprojects.com/en/2.11.x/api/#custom-filters](https://jinja.palletsprojects.com/en/2.11.x/api/#custom-filters)
-- All filters available in Ansible, official docs: [https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html)
-- All filters available in Salt, official docs: [https://docs.saltstack.com/en/latest/topics/jinja/index.html#filters](https://docs.saltstack.com/en/latest/topics/jinja/index.html#filters)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p4-template-filters](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p4-template-filters)
-
 # Jinja2 Tutorial - Part 5 - Macros
 
 Welcome to the part 5 of Jinja2 Tutorial where we learn all about macros. We'll talk about what macros are, why we would use them and we'll see some examples to help us appreciate this feature better.
 
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- Jinja2 Tutorial - Part 5 - Macros
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
 
 ## Contents
 
@@ -4125,24 +4408,11 @@ As always, see what works for you. If your macros get unwieldy consider using cu
 
 I hope you learned something from this post and that it gave you some ideas. More posts on Jinja2 are coming so do pop by every so often to see what's new :)
 
-## References
-- Jinja2 macros, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#macros](https://jinja.palletsprojects.com/en/2.11.x/templates/#macros)
-- Jinja2 calls, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#call](https://jinja.palletsprojects.com/en/2.11.x/templates/#call)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p5-macros](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p5-macros)
 
 # Jinja2 Tutorial - Part 6 - Include And Import
 
 Welcome to another instalment in my Jinja2 Tutorial series. So far we've learned a lot about rendering, control structures and various functions. Here we'll start discussing language features that help us deal with organizing templates. First constructs we'll look at are `include` and `import` statements.
 
-## Jinja2 Tutorial Series
-
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- Jinja2 Tutorial - Part 6 - Include and Import
-- [J2Live - Online Jinja2 Parser](https://ttl255.com/j2live-online-jinja2-parser/)
 
 ## Contents
 
@@ -4543,7 +4813,7 @@ Hopefully now you can see what the default behavior is when importing macros. Si
 
 However, if for whatever reason you think it is a good idea to allow your macros to access context variables you can change the default behavior with additional argument `with context` which you pass to `import` statement.
 
-`Note: This will automatically disable caching.`
+> Note: This will automatically disable caching.
 
 For completeness this is how we can "fix" our failing macro:
 
@@ -4589,11 +4859,6 @@ Context variables Not accessible (default) Accessible
 Good for Creating shared macro libraries Splitting template into logical units and common snippets
 
 I hope you found this post useful and are looking forward to more. Next post will continue discussion of ways to organize templates by focusing on template inheritance. Stay tuned!
-
-## References
-- Jinja2 import, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#import](https://jinja.palletsprojects.com/en/2.11.x/templates/#import)
-- Jinja2 include, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#include](https://jinja.palletsprojects.com/en/2.11.x/templates/#include)
-- GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p6-import-include](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p6-import-include)
 
 # J2Live - Online Jinja2 Parser
 
@@ -4663,13 +4928,6 @@ This option is particularly helpful when you try to learn how Jinja2 adds whites
 
 You can use **J2Live** as a companion tool for my Jinja2 Tutorial, simply copy paste example templates and data from the blog post.
 
-- [Jinja2 Tutorial - Part 1 - Introduction and variable substitution](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
-- [Jinja2 Tutorial - Part 2 - Loops and conditionals](https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/)
-- [Jinja2 Tutorial - Part 3 - Whitespace control](https://ttl255.com/jinja2-tutorial-part-3-whitespace-control/)
-- [Jinja2 Tutorial - Part 4 - Template filters](https://ttl255.com/jinja2-tutorial-part-4-template-filters/)
-- [Jinja2 Tutorial - Part 5 - Macros](https://ttl255.com/jinja2-tutorial-part-5-macros/)
-- [Jinja2 Tutorial - Part 6 - Include and Import](https://ttl255.com/jinja2-tutorial-part-6-include-and-import/)
-
 ## J2Live In Action
 
 I've also prepared gifs showing two features in action:
@@ -4700,5 +4958,43 @@ Jinja2 documentation explaining `trim` and `lstrip` options: [https://jinja.pall
 Jinja2 documentation describing Undefined types and their behaviour: [https://jinja.palletsprojects.com/en/2.11.x/api/#undefined-types](https://jinja.palletsprojects.com/en/2.11.x/api/#undefined-types)
 
 Python hashlib module docs, lists available hashing algorithms: [https://docs.python.org/3.8/library/hashlib.html#module-hashlib](https://docs.python.org/3.8/library/hashlib.html#module-hashlib)
+
+Official documentation for the latest version of Jinja2 (2.11.x). Available at: [https://jinja.palletsprojects.com/en/2.11.x/](https://jinja.palletsprojects.com/en/2.11.x/)
+
+Jinja2 Python library at PyPi. Available at: [https://pypi.org/project/Jinja2/](https://pypi.org/project/Jinja2/)
+
+GitHub repo with source code for Jinja. Available at: [https://github.com/pallets/jinja/](https://github.com/pallets/jinja/)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p1-intro-substitution](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p1-intro-substitution)
+
+Jinja2 built-in tests. Available at: [https://jinja.palletsprojects.com/en/2.11.x/templates/#list-of-builtin-tests](https://jinja.palletsprojects.com/en/2.11.x/templates/#list-of-builtin-tests)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p2-loops-conditionals](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p2-loops-conditionals)
+
+Documentation for Ansible template module: [https://docs.ansible.com/ansible/latest/modules/template_module.html](https://docs.ansible.com/ansible/latest/modules/template_module.html)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p3-whitespace-control)
+
+Jinja2 built-in filters, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters](https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters)
+
+Jinja2 custom filters, official docs: [https://jinja.palletsprojects.com/en/2.11.x/api/#custom-filters](https://jinja.palletsprojects.com/en/2.11.x/api/#custom-filters)
+
+All filters available in Ansible, official docs: [https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html)
+
+All filters available in Salt, official docs: [https://docs.saltstack.com/en/latest/topics/jinja/index.html#filters](https://docs.saltstack.com/en/latest/topics/jinja/index.html#filters)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p4-template-filters](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p4-template-filters)
+
+Jinja2 macros, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#macros](https://jinja.palletsprojects.com/en/2.11.x/templates/#macros)
+
+Jinja2 calls, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#call](https://jinja.palletsprojects.com/en/2.11.x/templates/#call)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p5-macros](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p5-macros)
+
+Jinja2 import, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#import](https://jinja.palletsprojects.com/en/2.11.x/templates/#import)
+
+Jinja2 include, official docs: [https://jinja.palletsprojects.com/en/2.11.x/templates/#include](https://jinja.palletsprojects.com/en/2.11.x/templates/#include)
+
+GitHub repo with resources for this post. Available at: [https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p6-import-include](https://github.com/progala/ttl255.com/tree/master/jinja2/jinja-tutorial-p6-import-include)
 
 > [TTL255 - Przemek Rogala's Blog](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
