@@ -2878,7 +2878,8 @@ Starting Jinja2 blocks from the beginning of the line and applying
 indentation inside of them is roughly equivalent to enabling `lstrip_block`.
 
 I say _roughly_ equivalent because we don't strip anything here,
-we just hide extra spaces inside of blocks preventing them from being picked up at all.
+we just hide extra spaces inside of blocks preventing
+them from being picked up at all.
 
 And there is an extra bonus to using this method, it will make your
 Jinja2 templates used in Ansible safer. Why? Read on!
@@ -3093,9 +3094,13 @@ I'll also show you how you can write your own custom filters.
 ## Overview Of Jinja2 Filters
 
 Let's jump straight in. Jinja2 filter is something we use to transform
-data held in variables. We apply filters by placing pipe symbol `|` after the variable followed by name of the filter.
+data held in variables. We apply filters by placing pipe symbol `|`
+after the variable followed by name of the filter.
 
-Filters can change the look and format of the source data, or even generate new data derived from the input values. What's important is that the original data is replaced by the result of transformations and that's what ends up in rendered templates.
+Filters can change the look and format of the source data,
+or even generate new data derived from the input values.
+What's important is that the original data is replaced by the result
+of transformations and that's what ends up in rendered templates.
 
 Here's an example showing a simple filter in action:
 
@@ -3117,9 +3122,13 @@ Result:
     First name: Przemek
 
 
-We passed `first_name` variable to `capitalize` filter. As the name of the filter suggests, string held by variable will end up capitalized. And this is exactly what we can see happened. Pretty cool, right?
+We passed `first_name` variable to `capitalize` filter. As the name
+of the filter suggests, string held by variable will end up capitalized.
+And this is exactly what we can see happened. Pretty cool, right?
 
-It might help to think of filters as functions that take Jinja2 variable as argument, the only difference to standard Python functions is syntax that we use.
+It might help to think of filters as functions that take Jinja2
+variable as argument, the only difference to standard
+Python functions is syntax that we use.
 
 Python equivalent of `capitalize` would look like this:
 
@@ -3132,15 +3141,22 @@ Python equivalent of `capitalize` would look like this:
     print("First name: {}".format(capitalize(first_name)))
 
 
-Great, you say. But how did I know that `capitalize` is a filter? Where did it come from?
+Great, you say. But how did I know that `capitalize` is a filter?
+Where did it come from?
 
-There's no magic here. Someone had to code all of those filters and make them available to us. Jinja2 comes with a number of useful filters, `capitalize` is one of them.
+There's no magic here. Someone had to code all of those filters
+and make them available to us. Jinja2 comes with a number
+of useful filters, `capitalize` is one of them.
 
-All of the built-in filters are documented in official Jinja2 docs. I'm including link in [references](#references) and later in this post I'll show examples of some of the more useful, in my opinion, filters.
+All of the built-in filters are documented in official Jinja2 docs.
+I'm including link in [references](#references) and later in this post
+I'll show examples of some of the more useful, in my opinion, filters.
 
 ## Multiple Arguments
 
-We're not limited to simple filters like `capitalize`. Some filters can take extra arguments in parentheses. These can be either keyword or positional arguments.
+We're not limited to simple filters like `capitalize`. Some filters
+can take extra arguments in parentheses. These can be either
+keyword or positional arguments.
 
 Below is an example of a filter taking extra argument.
 
@@ -3166,15 +3182,25 @@ Result:
     ip name-server 1.1.1.1 8.8.8.8 9.9.9.9 8.8.4.4
 
 
-Filter `join` took list stored in `name_servers` and created a string by gluing together elements of the list with space as a separator. Separator is the argument we supplied in parenthesis and we could use different one depending on our needs.
+Filter `join` took list stored in `name_servers` and created a string
+by gluing together elements of the list with space as a separator.
+Separator is the argument we supplied in parenthesis and we could use
+different one depending on our needs.
 
-You should refer to documentation to find out what arguments, if any, are available for given filter. Most filters use reasonable defaults and don't require all of the arguments to be explicitly specified.
+You should refer to documentation to find out what arguments, if any,
+are available for given filter. Most filters use reasonable defaults
+and don't require all of the arguments to be explicitly specified.
 
 ## Chaining Filters
 
-We've seen basic filter usage but we can do more. We can chain filters together. This means that multiple filters can be used at once, each separated by pipe `|`.
+We've seen basic filter usage but we can do more. We can chain filters
+together. This means that multiple filters can be used at once,
+each separated by pipe `|`.
 
-Jinja applies chained filters from left to right. Value that comes out of leftmost filter is fed into the next one, and the process is repeated until there are no more filters. Only the final result will end up in rendered template.
+Jinja applies chained filters from left to right. Value that comes out
+of leftmost filter is fed into the next one, and the process is
+repeated until there are no more filters.
+Only the final result will end up in rendered template.
 
 Let's have a look at how it works.
 
@@ -3198,51 +3224,92 @@ Result
     10 permit ip 10.0.0.0/24 10.1.0.0/24
 
 
-We passed list containing two items to `first` filter. This returned first element from the list and handed it over to `trim` filter which removed leading spaces.
+We passed list containing two items to `first` filter. This returned
+first element from the list and handed it over to `trim`
+filter which removed leading spaces.
 
 The end result is line `10 permit ip 10.0.0.0/24 10.1.0.0/24`.
 
-Filter chaining is a powerful feature that allows us to perform multiple transformations in one go. The alternative would be to store intermediate results which would decrease readability and wouldn't be as elegant.
+Filter chaining is a powerful feature that allows us to perform
+multiple transformations in one go. The alternative would be to store
+intermediate results which would decrease readability and
+wouldn't be as elegant.
 
 ## Additional Filters And Custom Filters
 
-Great as they are, built-in filters are very generic and many use cases call for more specific ones. This is why automation frameworks like Ansible or Salt provide many extra filters that cover wide range of scenarios.
+Great as they are, built-in filters are very generic and many
+use cases call for more specific ones. This is why automation
+frameworks like Ansible or Salt provide many extra filters that
+cover wide range of scenarios.
 
-In these frameworks you will find filters that can transform IP objects, display data in YAML/Json, or even apply regex, just to name a few. In [references](#references) you can find links to docs for filters available in each framework.
+In these frameworks you will find filters that can transform IP objects,
+display data in YAML/Json, or even apply regex, just to name a few.
+In [references](#references) you can find links to docs for filters
+available in each framework.
 
-Finally, you can create new filters yourself! Jinja2 provides hooks for adding custom filters. These are just Python functions, so if you wrote Python function before you will be able to write your own filter as well!
+Finally, you can create new filters yourself! Jinja2 provides hooks for
+adding custom filters. These are just Python functions,
+so if you wrote Python function before you will be able
+to write your own filter as well!
 
-Aforementioned automation frameworks also support custom filters and the process of writing them is similar to vanilla Jinja2. You again need to write a Python function and then documentation for given tool will show you steps needed to register your module as a filter.
+Aforementioned automation frameworks also support custom filters and
+the process of writing them is similar to vanilla Jinja2.
+You again need to write a Python function and then documentation for
+given tool will show you steps needed to register your module as a filter.
 
 ## Why Use Filters?
 
-No tool is a good fit for every problem. And some tools are solutions in search of a problem. So, why use Jinja2 filters?
+No tool is a good fit for every problem. And some tools are solutions
+in search of a problem. So, why use Jinja2 filters?
 
-Jinja, like most of the templating languages, was created with web content in mind. While data is stored in the standardized format in the database, we often need to transform it when displaying documents to the users. This is where language like Jinja with its filters enables on the go modification to the way data is presented, without having to touch back-end. That's the selling point of filters.
+Jinja, like most of the templating languages, was created with web
+content in mind. While data is stored in the standardized format in
+the database, we often need to transform it when displaying documents
+to the users. This is where language like Jinja with its filters
+enables on the go modification to the way data is presented,
+without having to touch back-end. That's the selling point of filters.
 
-Below is my personal view on why I think Jinja2 filters are a good addition to the language:
+Below is my personal view on why I think Jinja2 filters are a good
+addition to the language:
 
 **1. They allow non-programmers to perform simple data transformations.**
 
-This applies to vanilla filters as well as extra filters provided by automation frameworks. For example, network engineers know their IP addresses and they might want to operate on them in templates without having any programming knowledge. Filters to the rescue!
+This applies to vanilla filters as well as extra filters provided
+by automation frameworks. For example, network engineers know their
+IP addresses and they might want to operate on them in templates without
+having any programming knowledge. Filters to the rescue!
 
 **2. You get predictable results.**
 
-If you use generally available filters anyone with some Jinja2 experience will know what they do. This allows people to get up to speed when reviewing templates written by others.
+If you use generally available filters anyone with some Jinja2
+experience will know what they do. This allows people to get up
+to speed when reviewing templates written by others.
 
 **3. Filters are well maintained and tested.**
 
-Built-in filters as well as filters provided by automation frameworks are widely used by a lot people. This gives you high confidence that they give correct results and don't have many bugs.
+Built-in filters as well as filters provided by automation frameworks
+are widely used by a lot people. This gives you high confidence that
+they give correct results and don't have many bugs.
 
 **4. The best code is no code at all.**
 
-The moment you add data transformation operations to your program, or create a new filter, you become responsible for the code, forever. Any bugs, feature requests, and tests will come your way for the lifetime of the solution. Write as much stuff as you want when learning but use already available solutions in production, whenever possible.
+The moment you add data transformation operations to your program,
+or create a new filter, you become responsible for the code, forever.
+Any bugs, feature requests, and tests will come your way for the
+lifetime of the solution. Write as much stuff as you want when learning
+but use already available solutions in production, whenever possible.
 
 ## When Not To Use Filters?
 
-Filters can be really powerful and save us a lot of time. But with great power comes great responsibility. Overuse filters and you can end up with templates that are difficult to understand and maintain.
+Filters can be really powerful and save us a lot of time.
+But with great power comes great responsibility.
+Overuse filters and you can end up with templates that
+are difficult to understand and maintain.
 
-You know those clever one liners that no one, including yourself, can understand few months down the line? It's very easy to get into those situations with chaining a lot of filters, especially ones accepting multiple arguments.
+You know those clever one liners that no one, including yourself,
+can understand few months down the line? It's very easy to get into
+those situations with chaining a lot of filters,
+especially ones accepting multiple arguments.
 
 I use the below heuristics to help me decide if what I did is too complicated:
 
@@ -3250,11 +3317,18 @@ I use the below heuristics to help me decide if what I did is too complicated:
 - Do I feel like what I just wrote is really clever?
 - Did I use many chained filters in a way that didn't seem obvious at first?
 
-If you answer yes to at least one of the above, you might be dealing with the case of _too clever for your own good_. It is possible that there's no good simpler solution for your use case, but chances are you need to do refactoring. If you're unsure if that's the case it's best to ask your colleagues or check with community.
+If you answer yes to at least one of the above, you might be dealing
+with the case of _too clever for your own good_. It is possible that
+there's no good simpler solution for your use case, but chances
+are you need to do refactoring. If you're unsure if that's
+the case it's best to ask your colleagues or check with community.
 
-To show you how bad things can get, here's an example of Jinja2 lines I wrote a few years ago. These use filters provided by Ansible and it got so complicated that I had to define intermediate variables.
+To show you how bad things can get, here's an example of Jinja2 lines
+I wrote a few years ago. These use filters provided by Ansible and
+it got so complicated that I had to define intermediate variables.
 
-Have a look at it and try to figure what does it do, and more importantly, how does it do it.
+Have a look at it and try to figure what does it do, and more
+importantly, how does it do it.
 
 Template, cut down for brevity:
 
@@ -3278,25 +3352,41 @@ Example data used with the template:
     - { name: Ethernet1, ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02
 
 
-There's so much to unpack here. In the first line I assign query string to a variable as a workaround for character escaping issues. In line two I apply `json_query` filter with argument coming from variable in line one, the result is stored in another helper variable. Finally, in the line three I apply two chained filters `json_query` and `ipaddr`.
+There's so much to unpack here. In the first line I assign query string
+to a variable as a workaround for character escaping issues.
+In line two I apply `json_query` filter with argument coming from
+variable in line one, the result is stored in another helper variable.
+Finally, in the line three I apply two chained filters `json_query`
+and `ipaddr`.
 
-The end result of these three lines should be IP address of BGP peer found on given interface.
+The end result of these three lines should be IP address of BGP peer
+found on given interface.
 
-I'm sure you will agree with me that this is terrible. Does this solution get any ticks next to heuristics I mentioned earlier? Yes! Three of them! This is a prime candidate for refactoring.
+I'm sure you will agree with me that this is terrible.
+Does this solution get any ticks next to heuristics I mentioned earlier?
+Yes! Three of them! This is a prime candidate for refactoring.
 
 There are generally two things we can do in cases such as this:
 
-- Pre-process data in the upper layer that calls rendering, e.g. Python, Ansible, etc.
+- Pre-process data in the upper layer that calls rendering,
+e.g. Python, Ansible, etc.
 - Write a custom filter.
 - Revise the data model to see if it can be simplified.
 
-In this case I went with option 2, I wrote my own filter, which luckily is the next topic on our list.
+In this case I went with option 2, I wrote my own filter,
+which luckily is the next topic on our list.
 
 ## Writing Your Own Filters
 
-As I already mentioned, to write a custom filter you need to get your hands dirty and write some Python code. Have no fear however! If you ever wrote a function taking an argument you've got all it takes. That's right, we don't need to do anything too fancy, any regular Python function can become a filter. It just needs to take at least one argument and it must return something.
+As I already mentioned, to write a custom filter you need to get your
+hands dirty and write some Python code. Have no fear however!
+If you ever wrote a function taking an argument you've got all it takes.
+That's right, we don't need to do anything too fancy, any regular Python
+function can become a filter. It just needs to take at least one
+argument and it must return something.
 
-Here's an example of function that we will register with Jinja2 engine as a filter:
+Here's an example of function that we will register with
+Jinja2 engine as a filter:
 
 
     # hash_filter.py
@@ -3347,19 +3437,28 @@ Result of rendering:
     MD5 hash of '$3cr3tP44$$': ec362248c05ae421533dd86d86b6e5ff
 
 
-Look at that! Our very own filter! It looks and feels just like built-in Jinja filters, right?
+Look at that! Our very own filter! It looks and feels just
+like built-in Jinja filters, right?
 
-And what does it do? It exposes hashing functions from Python's `hashlib` library to allow for direct use of hashes in Jinja2 templates. Pretty neat if you ask me.
+And what does it do? It exposes hashing functions from Python's
+`hashlib` library to allow for direct use of hashes in
+Jinja2 templates. Pretty neat if you ask me.
 
 To put it in words, below are the steps needed to create custom filter:
 
-1. Create a function taking at least one argument, that returns a value. First argument is always the Jinja variable preceding `|` symbol. Subsequent arguments are provided in parentheses `(...)`.
-2. Register the function with Jinja2 Environment. In Python insert your function into `filters` dictionary, which is an attribute of `Environment` object. Key name is what you want your filter to be called, here `hash`, and value is your function.
+1. Create a function taking at least one argument, that returns a value.
+First argument is always the Jinja variable preceding `|` symbol.
+Subsequent arguments are provided in parentheses `(...)`.
+2. Register the function with Jinja2 Environment. In Python insert your
+function into `filters` dictionary, which is an attribute
+of `Environment` object. Key name is what you want your filter
+to be called, here `hash`, and value is your function.
 3. You can now use your filter same as any other Jinja filter.
 
 ## Fixing "Too Clever" Solution With Ansible Custom Filter
 
-We know how to write custom filters, so now I can show you how I replaced part of my template where I went too far with clever tricks.
+We know how to write custom filters, so now I can show you how
+I replaced part of my template where I went too far with clever tricks.
 
 Here is my custom filter in its fully glory:
 
@@ -3389,9 +3488,14 @@ Here is my custom filter in its fully glory:
             }
 
 
-First part is something you've seen before, it's a Python function taking two arguments and returning one value. Sure, it's longer than _"clever"_ three-liner, but it's so much more readable.
+First part is something you've seen before, it's a Python function
+taking two arguments and returning one value. Sure, it's longer
+than _"clever"_ three-liner, but it's so much more readable.
 
-There's more structure here, variables have meaningful names and I can tell what it's doing pretty much right away. More importantly, I know how it's doing it, process is broken down into many individual steps that are easy to follow.
+There's more structure here, variables have meaningful names and I
+can tell what it's doing pretty much right away. More importantly,
+I know how it's doing it, process is broken down into many individual
+steps that are easy to follow.
 
 ## Custom Filters In Ansible
 
@@ -3406,13 +3510,24 @@ The second part of my solution is a bit different than vanilla Python example:
             }
 
 
-This is how you tell Ansible that you want `get_peer_info` to be registered as a Jinja2 filter.
+This is how you tell Ansible that you want `get_peer_info`
+to be registered as a Jinja2 filter.
 
-You create class named `FilterModule` with one method called `filters`. This method must return dictionary with your filters. Keys in dictionary are names of the filters and values are functions. I say filter(s) and not filter, because you can register multiple filters in one file. Optionally you can have one filter per file if you prefer.
+You create class named `FilterModule` with one method called `filters`.
+This method must return dictionary with your filters. Keys in dictionary
+are names of the filters and values are functions.
+I say filter(s) and not filter, because you can register
+multiple filters in one file. Optionally you can have one
+filter per file if you prefer.
 
-Once all is done you need to drop your Python module in `filter_plugins` directory, which should be located in the root of your repository. With that in place you can use your filters in Ansible Playbooks as well as Jinja2 templates.
+Once all is done you need to drop your Python module
+in `filter_plugins` directory, which should be located in the root
+of your repository. With that in place you can use your filters
+in Ansible Playbooks as well as Jinja2 templates.
 
-Below you can see structure of the directory where my playbook `deploy_base.yml` is located in relation to the `get_peer_info.py` module.
+Below you can see structure of the directory where my
+playbook `deploy_base.yml` is located in relation
+to the `get_peer_info.py` module.
 
 
     .
@@ -3431,11 +3546,17 @@ Below you can see structure of the directory where my playbook `deploy_base.yml`
 
 ## Jinja2 Filters - Usage Examples
 
-All of the Jinja2 filters are well documented in officials docs but I felt that some of them could use some more examples. Below you will find my subjective selection with some comments and explanations.
+All of the Jinja2 filters are well documented in officials docs but I
+felt that some of them could use some more examples.
+Below you will find my subjective selection with some comments and explanations.
 
 ## Batch
 
-`batch(value, linecount, fill_with=None)` - Allows you to group list elements into multiple buckets, each containing up to **n** elements, where **n** is number we specify. Optionally we can also ask `batch` to pad bucket with default entries to make all of the buckets exactly **n** in length. Result is list of lists.
+`batch(value, linecount, fill_with=None)` - Allows you to group list
+elements into multiple buckets, each containing up to **n** elements,
+where **n** is number we specify. Optionally we can also ask `batch`
+to pad bucket with default entries to make all of the buckets
+exactly **n** in length. Result is list of lists.
 
 I find it handy for splitting items into groups of fixed size.
 
@@ -3468,7 +3589,8 @@ Result:
 
 ## Center
 
-`center(value, width=80)`- Centers value in a field of given width by adding space padding. Handy when adding formatting to reporting.
+`center(value, width=80)`- Centers value in a field of given width by
+adding space padding. Handy when adding formatting to reporting.
 
 Template:
 
@@ -3497,9 +3619,13 @@ Result:
 
 ## Default
 
-`default(value, default_value='', boolean=False)` - Returns default value if passed variable is not specified. Useful for guarding against undefined variables. Can also be used for _optional_ attribute that we want to set to sane value as a default.
+`default(value, default_value='', boolean=False)` - Returns default
+value if passed variable is not specified. Useful for guarding against
+undefined variables. Can also be used for _optional_ attribute
+that we want to set to sane value as a default.
 
-In below example we place interfaces in their configured vlans, or if no vlan is specified we assign them to vlan 10 by default.
+In below example we place interfaces in their configured vlans,
+or if no vlan is specified we assign them to vlan 10 by default.
 
 Template:
 
@@ -3542,7 +3668,10 @@ Result:
 
 ## Dictsort
 
-`dictsort(value, case_sensitive=False, by='key', reverse=False)` - Allows us to sort dictionaries as they are not sorted by default in Python. Sorting is done by _key_ by default but you can request sorting by _value_ using attribute `by='value'`.
+`dictsort(value, case_sensitive=False, by='key', reverse=False)` - Allows
+us to sort dictionaries as they are not sorted by default in Python.
+Sorting is done by _key_ by default but you can request sorting
+by _value_ using attribute `by='value'`.
 
 In below example we sort prefix-lists by their name (dict key):
 
@@ -3578,7 +3707,8 @@ Result:
     permit 10.0.1.0/24
 
 
-And here we order some peer list by priority (dict value), with higher values being more preferred, hence use of `reverse=true`:
+And here we order some peer list by priority (dict value), with higher
+values being more preferred, hence use of `reverse=true`:
 
 Template:
 
@@ -3611,7 +3741,9 @@ Result:
 
 ## Float
 
-`float(value, default=0.0)` - Converts the value to float number. Numeric values in API responses sometimes come as strings. With `float` we can make sure string is converted before making comparison.
+`float(value, default=0.0)` - Converts the value to float number.
+Numeric values in API responses sometimes come as strings.
+With `float` we can make sure string is converted before making comparison.
 
 Here's an example of software version checking that uses `float`.
 
@@ -3639,9 +3771,14 @@ Result
 
 ## Groupby
 
-`groupby(value, attribute)` - Used to group objects based on one of the attributes. You can choose to group by nested attribute using dot notation. This filter can be used for reporting based on feature value or selecting items for an operation that is only applicable to a subset of objects.
+`groupby(value, attribute)` - Used to group objects based on one of
+the attributes. You can choose to group by nested attribute using
+dot notation. This filter can be used for reporting based on feature
+value or selecting items for an operation that is only
+applicable to a subset of objects.
 
-In the below example we group interfaces based on the vlan they're assigned to:
+In the below example we group interfaces based on the vlan
+they're assigned to:
 
 Template:
 
@@ -3674,7 +3811,9 @@ Result:
 
 ## Int
 
-`int(value, default=0, base=10)` - Same as float but here we convert value to integer. Can be also used for converting other bases into decimal base:
+`int(value, default=0, base=10)` - Same as float but here we convert
+value to integer. Can be also used for converting
+other bases into decimal base:
 
 Example below shows hexadecimal to decimal conversion.
 
@@ -3702,9 +3841,12 @@ Result:
 
 ## Join
 
-`join(value, d='', attribute=None)` - Very, very useful filter. Takes elements of the sequence and returns concatenated elements as a string.
+`join(value, d='', attribute=None)` - Very, very useful filter.
+Takes elements of the sequence and returns concatenated elements as a string.
 
-For cases when you just want to display items, without applying any operations, it can replace `for` loop. I find `join` version more readable in these cases.
+For cases when you just want to display items, without applying any
+operations, it can replace `for` loop. I find `join` version
+more readable in these cases.
 
 Template:
 
@@ -3730,9 +3872,11 @@ Result:
 
 ## Map
 
-`map(*args, **kwargs)` - Can be used to look up an attribute or apply filter on all objects in the sequence.
+`map(*args, **kwargs)` - Can be used to look up an attribute or
+apply filter on all objects in the sequence.
 
-For instance if you want to normalize letter casing across device names you could apply filter in one go.
+For instance if you want to normalize letter casing across device
+names you could apply filter in one go.
 
 Template:
 
@@ -3759,7 +3903,9 @@ Result:
     Inet-rtr-berlin-01
 
 
-Personally I find it most useful for retrieving attributes and their values across a large number of objects. Here we're only interested in values of `name` attribute:
+Personally I find it most useful for retrieving attributes and their
+values across a large number of objects. Here we're only interested
+in values of `name` attribute:
 
 Template:
 
@@ -3794,7 +3940,9 @@ Result:
 
 ## Reject
 
-`reject(*args, **kwargs)` - Filters sequence of items by applying a Jinja2 test and rejecting objects succeeding the test. That is item will be removed from the final list if result of the test is `true`.
+`reject(*args, **kwargs)` - Filters sequence of items by applying a
+Jinja2 test and rejecting objects succeeding the test. That is item will
+be removed from the final list if result of the test is `true`.
 
 Here we want to display only public BGP AS numbers.
 
@@ -3828,11 +3976,14 @@ Result:
 
 ## Rejectattr
 
-`rejectattr(*args, **kwargs)` - Same as `reject` filter but test is applied to the selected attribute of the object.
+`rejectattr(*args, **kwargs)` - Same as `reject` filter but test is
+applied to the selected attribute of the object.
 
-If your chosen test takes arguments, provide them after test name, separated by commas.
+If your chosen test takes arguments, provide them after test name,
+separated by commas.
 
-In this example we want to remove 'switched' interfaces from the list by applying test to the 'mode' attribute.
+In this example we want to remove 'switched' interfaces from the list
+by applying test to the 'mode' attribute.
 
 Template:
 
@@ -3868,9 +4019,13 @@ Result:
 
 ## Select
 
-`select(*args, **kwargs)` - Filters the sequence by retaining only the elements passing the Jinja2 test. This filter is the opposite of `reject`. You can use either of those depending on what feels more natural in given scenario.
+`select(*args, **kwargs)` - Filters the sequence by retaining only the
+elements passing the Jinja2 test. This filter is the opposite of `reject`.
+You can use either of those depending on what feels
+more natural in given scenario.
 
-Similarly to `reject` there's also `selectattr` filter that works the same as `select` but is applied to the attribute of each object.
+Similarly to `reject` there's also `selectattr` filter that works
+the same as `select` but is applied to the attribute of each object.
 
 Below we want to report on private BGP AS numbers found on our device.
 
@@ -3905,7 +4060,10 @@ Result:
 
 ## Tojson
 
-`tojson(value, indent=None)` - Dumps data structure in JSON format. Useful when rendered template is consumed by application expecting JSON. Can be also used as an alternative to `pprint` for prettifying variable debug output.
+`tojson(value, indent=None)` - Dumps data structure in JSON format.
+Useful when rendered template is consumed by application expecting JSON.
+Can be also used as an alternative to `pprint` for
+prettifying variable debug output.
 
 Template:
 
@@ -3952,7 +4110,9 @@ Result:
 
 ## Unique
 
-`unique(value, case_sensitive=False, attribute=None)` - Returns list of unique values in given collection. Pairs well with `map` filter for finding set of values used for given attribute.
+`unique(value, case_sensitive=False, attribute=None)` - Returns list of
+unique values in given collection. Pairs well with `map` filter for
+finding set of values used for given attribute.
 
 Here we're finding which access vlans we use across our interfaces.
 
@@ -3984,15 +4144,24 @@ Result:
 
 ## Conclusion
 
-And with this fairly long list of examples we came to the end of this part of the tutorial. Jinja2 filters can be a very powerful tool in right hands and I hope that my explanations helped you in seeing their potential.
+And with this fairly long list of examples we came to the end of
+this part of the tutorial. Jinja2 filters can be a very powerful tool
+in right hands and I hope that my explanations
+helped you in seeing their potential.
 
-You do need to remember to use them judiciously, if it starts looking unwieldy and doesn't feel right, look at alternatives. See if you can move complexity outside of the template, revise your data model, or if that's not possible, write your own filter.
+You do need to remember to use them judiciously, if it starts looking
+unwieldy and doesn't feel right, look at alternatives. See if you can
+move complexity outside of the template, revise your data model,
+or if that's not possible, write your own filter.
 
-That's all from me. As always, I look forward to seeing you again, more Jinja2 posts are coming soon!
+That's all from me. As always, I look forward to seeing you again,
+more Jinja2 posts are coming soon!
 
 # Jinja2 Tutorial - Part 5 - Macros
 
-Welcome to the part 5 of Jinja2 Tutorial where we learn all about macros. We'll talk about what macros are, why we would use them and we'll see some examples to help us appreciate this feature better.
+Welcome to the part 5 of Jinja2 Tutorial where we learn all about macros.
+We'll talk about what macros are, why we would use them and
+we'll see some examples to help us appreciate this feature better.
 
 
 ## Contents
@@ -4013,17 +4182,28 @@ Welcome to the part 5 of Jinja2 Tutorial where we learn all about macros. We'll 
 
 ## What Are Macros?
 
-Macros are similar to functions in many programming languages. We use them to encapsulate logic used to perform repeatable actions. Macros can take arguments or be used without them.
+Macros are similar to functions in many programming languages.
+We use them to encapsulate logic used to perform repeatable actions.
+Macros can take arguments or be used without them.
 
-Inside of macros we can use any of the Jinja features and constructs. Result of running macro is some text. You can essentially treat macro as one big evaluation statement that also allows parametrization.
+Inside of macros we can use any of the Jinja features and constructs.
+Result of running macro is some text. You can essentially treat macro
+as one big evaluation statement that also allows parametrization.
 
 ## Why And How Of Macros
 
-Macros are great for creating reusable components when we find ourselves copy pasting around same lines of text and code. You might benefit from macro even when all it does is rendering static text.
+Macros are great for creating reusable components when we find ourselves
+copy pasting around same lines of text and code. You might benefit
+from macro even when all it does is rendering static text.
 
-Take for example device banners, these tend to be static but are used over and over again. Instead of copy pasting text of the banner across your templates you can create macro and have it render the banner.
+Take for example device banners, these tend to be static but are used
+over and over again. Instead of copy pasting text of the banner across
+your templates you can create macro and have it render the banner.
 
-Not only will you reduce mistakes that can happen during copying but you also make future updates to the banner much easier. Now you have only one place where the banner needs to be changed and anything else using this macro will reflect the changes automatically.
+Not only will you reduce mistakes that can happen during copying but
+you also make future updates to the banner much easier.
+Now you have only one place where the banner needs to be changed and
+anything else using this macro will reflect the changes automatically.
 
 
     {% macro banner() -%}
@@ -4053,17 +4233,26 @@ Not only will you reduce mistakes that can happen during copying but you also ma
 
 So that's our first macro right there!
 
-As you can see above we start macro with `{% macro macro_name(arg1, arg2) %}` and we end it with `{% endmacro %}`. Arguments are optional.
+As you can see above we start macro
+with `{% macro macro_name(arg1, arg2) %}` and we end
+it with `{% endmacro %}`. Arguments are optional.
 
-Anything you put in between opening and closing tags will be processed and rendered at a location where you called the macro.
+Anything you put in between opening and closing tags will be processed
+and rendered at a location where you called the macro.
 
-Once we defined macro we can use it anywhere in our template. We can directly insert results by using `{{ macro_name() }}` substitution syntax. We can also use it inside other constructs like `if..else` blocks or `for` loops. You can even pass macros to other macros!
+Once we defined macro we can use it anywhere in our template. We can
+directly insert results by using `{{ macro_name() }}` substitution syntax.
+We can also use it inside other constructs like `if..else` blocks
+or `for` loops. You can even pass macros to other macros!
 
 ## Adding Parameters
 
-Real fun begins when you start using parameters in your macros. That's when their show their true potential.
+Real fun begins when you start using parameters in your macros.
+That's when their show their true potential.
 
-Oure next macro renders default interface description. We assign different roles to our ports and we want the default description to reflect that. We could achieve this by writing macro taking interface role as argument.
+Oure next macro renders default interface description. We assign different
+roles to our ports and we want the default description to reflect that.
+We could achieve this by writing macro taking interface role as argument.
 
 Data:
 
@@ -4109,7 +4298,9 @@ Rendered text:
     ip address
 
 
-It might not be immediately apparent if macro is useful here since we only have one line in the body. We could've just written this line inside of the `for` loop. Downside of that is that our intent is not clearly conveyed.
+It might not be immediately apparent if macro is useful here since we
+only have one line in the body. We could've just written this line inside
+of the `for` loop. Downside of that is that our intent is not clearly conveyed.
 
 
     {% for intf in interfaces -%}
@@ -4118,19 +4309,33 @@ It might not be immediately apparent if macro is useful here since we only have 
     {% endfor -%}
 
 
-This works but it's not immediately obvious that this is description we want to be used as a default. Things will get even worse if we start adding more processing here.
+This works but it's not immediately obvious that this is description
+we want to be used as a default. Things will get even worse if
+we start adding more processing here.
 
-If we use macro however, the name of the macro tells us clearly that a default interface description will be applied. That is, it is clear what our intent was here.
+If we use macro however, the name of the macro tells us clearly that
+a default interface description will be applied. That is,
+it is clear what our intent was here.
 
-And there's the real kicker. Macros can be moved to separate files and included in templates that need them. Which means you only need to maintain this one macro that then can be used by hundreds of templates! And number of places you have to update your default description? One, just one.
+And there's the real kicker. Macros can be moved to separate files and
+included in templates that need them. Which means you only need to
+maintain this one macro that then can be used by hundreds of templates!
+And number of places you have to update your default description?
+One, just one.
 
 ## Macros For Deeply Nested Structures
 
-Another good use case for macros is accessing values in deeply nested data structures.
+Another good use case for macros is accessing values in deeply
+nested data structures.
 
-Modern APIs can return results with many levels of dictionaries and lists making it easy to make error when writing expressions accessing values in these data structures.
+Modern APIs can return results with many levels of dictionaries and
+lists making it easy to make error when writing expressions
+accessing values in these data structures.
 
-The below is real-life example of output returned by Arista device for command: `sh ip bgp neighbors x.x.x.x received-routes | json`
+The below is real-life example of output returned by Arista device
+for command:
+
+    sh ip bgp neighbors x.x.x.x received-routes | json
 
 Due to size, I'm showing full result for one route entry only, out of 3:
 
@@ -4181,19 +4386,23 @@ Due to size, I'm showing full result for one route entry only, out of 3:
     }
 
 
-There's a lot going on here and in most cases you will only need to get values for few of these attributes.
+There's a lot going on here and in most cases you will only need to get
+values for few of these attributes.
 
 Say we wanted to access just prefix, next-hop and validity of the path.
 
-Below is object hierarchy we need to navigate in order to access these values:
+Below is object hierarchy we need to navigate in order
+to access these values:
 
 - `vrfs.default.bgpRouteEntries` - prefixes are here (as keys)
 - `vrfs.default.bgpRouteEntries[pfx].bgpRoutePaths.0.nextHop` - next hop
 - `vrfs.default.bgpRouteEntries[pfx].bgpRoutePaths.0.routeType.valid` - route validity
 
-I don't know about you but I really don't fancy copy pasting that into all places I would need to access these.
+I don't know about you but I really don't fancy copy pasting that into
+all places I would need to access these.
 
-So here's what we can do to make it a bit easier, and more obvious, for ourselves.
+So here's what we can do to make it a bit easier, and more obvious,
+for ourselves.
 
 
     {% macro print_route_info(sh_bgpr) -%}
@@ -4211,17 +4420,26 @@ So here's what we can do to make it a bit easier, and more obvious, for ourselve
     Route: 10.1.0.3/32 - Next Hop: 10.2.0.0 - Permitted: True
 
 
-I moved the logic, and complexity, involved in accessing attributes to a macro called `print_route_info`. This macro takes output of our show command and then gives us back only what we need.
+I moved the logic, and complexity, involved in accessing attributes to
+a macro called `print_route_info`. This macro takes output of our show
+command and then gives us back only what we need.
 
-If we need to access more attributes we'd only have to make changes to the body of our macro.
+If we need to access more attributes we'd only have to make changes to
+the body of our macro.
 
-At the place where we actually need the information we call well named macro and give it the output of the command. This makes it more obvious as to what we're trying to achieve and mechanics of navigating data structures are hidden away.
+At the place where we actually need the information we call well named
+macro and give it the output of the command. This makes it more obvious
+as to what we're trying to achieve and mechanics of navigating
+data structures are hidden away.
 
 ## Branching Out Inside Macro
 
-Let's do another example, this time our macro will have `if..else` block to show that we can return result depending on conditional checks.
+Let's do another example, this time our macro will have `if..else`
+block to show that we can return result depending on conditional checks.
 
-I created data model where BGP peer IP and name are not explicitly listed in the mapping I use for specifying peers. Instead we're pointing each peer entry to local interface over which we want to establish the peering.
+I created data model where BGP peer IP and name are not explicitly
+listed in the mapping I use for specifying peers. Instead we're pointing
+each peer entry to local interface over which we want to establish the peering.
 
 We're also assuming here that all of our peerings use /31 mask.
 
@@ -4245,7 +4463,8 @@ We're also assuming here that all of our peerings use /31 mask.
     as_no: 64512
 
 
-Using this data model we want to build config for BGP neighbors. Taking advantage of `ipaddr` filter we can do the following:
+Using this data model we want to build config for BGP neighbors.
+Taking advantage of `ipaddr` filter we can do the following:
 
 - Find 1st IP address in network configured on the linked interface.
 - Check if 1st IP address equals IP address configured on the interface.
@@ -4278,17 +4497,26 @@ And this is the result of rendering:
     neighbor 10.1.1.8 description spine2
 
 
-Job done. We got what we wanted, neighbor IP worked out automatically from IP assigned to local interface.
+Job done. We got what we wanted, neighbor IP worked out automatically
+from IP assigned to local interface.
 
-But, the longer I look at it the more I don't like feel of this logic and manipulation preceding the actual neighbor statements.
+But, the longer I look at it the more I don't like feel of this logic
+and manipulation preceding the actual neighbor statements.
 
-You also might want to use the logic of working out peer IP elsewhere in the template which means copy pasting. And if later you change mask on the interface or want to change data structure slightly you'll have to find all the places with the logic and make sure you change all of them.
+You also might want to use the logic of working out peer IP elsewhere
+in the template which means copy pasting. And if later you change mask
+on the interface or want to change data structure slightly you'll have
+to find all the places with the logic and make sure you change all of them.
 
 I'd say this case is another good candidate for building a macro.
 
-So I'm going to move logic for working out peer IP to the macro that I'm calling `peer_ip`. This macro will take one argument `local_intf` which is the name of the interface for which we're configuring peering.
+So I'm going to move logic for working out peer IP to the macro that
+I'm calling `peer_ip`. This macro will take one argument `local_intf`
+which is the name of the interface for which we're configuring peering.
 
-If you compare this version with non-macro version you can see that most of the code is the same except that instead of setting final value and assigning it to variable we use substitution statements.
+If you compare this version with non-macro version you can see that most
+of the code is the same except that instead of setting final value and
+assigning it to variable we use substitution statements.
 
 
     {% macro peer_ip(local_intf) -%}
@@ -4309,27 +4537,51 @@ If you compare this version with non-macro version you can see that most of the 
     {%- endfor %}
 
 
-We use this macro in exactly one place in our function, we assign value it returns to variable `bgp_peer_ip`. We can then use `bgp_peer_ip` in our neighbor statements. `{%- set bgp_peer_ip = peer_ip(peer.intf) %}`
+We use this macro in exactly one place in our function, we assign value
+it returns to variable `bgp_peer_ip`. We can then use `bgp_peer_ip`
+in our neighbor statements. `{%- set bgp_peer_ip = peer_ip(peer.intf) %}`
 
-Another thing that I like about this approach is that we can move macro to its own file and then include it in the templates that use it.
+Another thing that I like about this approach is that we can move macro
+to its own file and then include it in the templates that use it.
 
-We'll talk about Jinja imports and includes in more details in future posts. However this is such a useful feature that later in this post I will show you short example of macros in their own files.
+We'll talk about Jinja imports and includes in more details in future
+posts. However this is such a useful feature that later in this post
+I will show you short example of macros in their own files.
 
 ## Macros In Macros
 
-Now here's an interesting one. We can pass macros as arguments to other macros. This is similar to Python where functions can be passed around like any other object.
+Now here's an interesting one. We can pass macros as arguments to other
+macros. This is similar to Python where functions can be passed
+around like any other object.
 
-Would we want to do it though? There are certainly cases when that might be useful. I can think of need for having more generic macro producing some result and taking another macro as an argument to enable changing of format used to render result.
+Would we want to do it though? There are certainly cases when that might
+be useful. I can think of need for having more generic macro producing
+some result and taking another macro as an argument to enable changing
+of format used to render result.
 
-This means that we could have parent macro deal with rendering common part of the output we're interested in. Then macro passed as an argument would be responsible for handling difference in rendering specific bit that would be dependent on the needs of the caller.
+This means that we could have parent macro deal with rendering common
+part of the output we're interested in. Then macro passed as an argument
+would be responsible for handling difference in rendering specific bit
+that would be dependent on the needs of the caller.
 
-To illustrate this and make it easier to visualize, consider case of rendering ACL entries. Different vendors could, and often do, use different format for IP source and destination objects. Some will use "net_address/pfxlen", while some will use "net_address wildcard".
+To illustrate this and make it easier to visualize, consider case of
+rendering ACL entries. Different vendors could, and often do, use
+different format for IP source and destination objects.
+Some will use "net_address/pfxlen", while some will use "net_address wildcard".
 
-We could write multiple ACL rendering macros, one for each case. Another option would be to have `if..else` logic in larger macro with macro argument deciding which format to use.
+We could write multiple ACL rendering macros, one for each case.
+Another option would be to have `if..else` logic in larger macro with
+macro argument deciding which format to use.
 
-Or we can encapsulate logic responsible for format conversion in tiny macros. We then can have macro responsible for ACL rendering that receives format conversion macro as one of the arguments. That is, ACL macro doesn't know how to do rendering and it does not care. It just knows that it will be given macro from outside and that it can apply it where required.
+Or we can encapsulate logic responsible for format conversion in
+tiny macros. We then can have macro responsible for ACL rendering that
+receives format conversion macro as one of the arguments. That is,
+ACL macro doesn't know how to do rendering and it does not care.
+It just knows that it will be given macro from outside and that it
+can apply it where required.
 
-Here's the actual implementation that includes 3 different formatting macros.
+Here's the actual implementation that includes 3 different
+formatting macros.
 
 Data used for our example:
 
@@ -4404,19 +4656,30 @@ Rendering results with `ip_w_pfxlen` macro:
     permit tcp 10.0.0.0/24 10.91.6.32/27 eq 6800
 
 
-Hopefully now you can see what I'm trying to achieve here. I can use the same parent macro in templates rendering the config for different vendors by simply providing different formatter macro. To top it off, we make our intent clear, yet again.
+Hopefully now you can see what I'm trying to achieve here. I can use
+the same parent macro in templates rendering the config for different
+vendors by simply providing different formatter macro. To top it off,
+we make our intent clear, yet again.
 
-Our formatting macros can be reused in many places and it's very easy to add new formatters that can be used in ACL macro and elsewhere.
+Our formatting macros can be reused in many places and it's very easy
+to add new formatters that can be used in ACL macro and elsewhere.
 
-Also by decoupling, and abstracting away, IP prefix formatting we make ACL macro more focused.
+Also by decoupling, and abstracting away, IP prefix formatting we
+make ACL macro more focused.
 
-A lot of these decisions are down to individual preferences but I feel that this technique is very powerful and it's good to know that it's there when you need it.
+A lot of these decisions are down to individual preferences but I feel
+that this technique is very powerful and it's good to know that it's
+there when you need it.
 
 ## Moving Macros To A Separate File
 
-I'll now show you an example of how a macro can be moved to a separate template file. We will then import the macro and call it from template located in a completely different file.
+I'll now show you an example of how a macro can be moved to a separate
+template file. We will then import the macro and call it from template
+located in a completely different file.
 
-I decided to take macros we created for displaying IP network in different formats. I'm moving 3 formatting macros to separate file and keeping ACL macro in the original template.
+I decided to take macros we created for displaying IP network in
+different formats. I'm moving 3 formatting macros to separate file
+and keeping ACL macro in the original template.
 
 The result is two templates.
 
@@ -4476,15 +4739,25 @@ The result is two templates.
     {% endfor -%}
 
 
-First template `ip_funcs.j2` contains formatter macros, and nothing else. Notice also there's no change to the code, we copied these over ad verbatim.
+First template `ip_funcs.j2` contains formatter macros, and nothing else.
+Notice also there's no change to the code, we copied these over ad verbatim.
 
-Something interesting happened to our original template, here called `acl_variants.j2`. First line `{% import 'ip_funcs.j2' as ipfn -%}` is new and the way we call formatter macros is different now.
+Something interesting happened to our original template, here
+called `acl_variants.j2`. First line `{% import 'ip_funcs.j2'
+as ipfn -%}` is new and the way we call formatter macros is different now.
 
-Line `{% import 'ip_funcs.j2' as ipfn -%}` looks like `import` statement in Python and it works similarly. Jinja engine will look for file called `ip_funcs.j2` and will make variables and macros from that file available in namespace `ipfn`. That is anything found in imported file can be now accessed using `ipfn.` notation.
+Line `{% import 'ip_funcs.j2' as ipfn -%}` looks like `import` statement
+in Python and it works similarly. Jinja engine will look for file
+called `ip_funcs.j2` and will make variables and macros from that file
+available in namespace `ipfn`. That is anything found in imported file
+can be now accessed using `ipfn.` notation.
 
-And this is how we get to the way we need to call formatters now. For example macro converting IP prefix to network/wildcard form is called with `ipfn.ip_w_wc` syntax.
+And this is how we get to the way we need to call formatters now.
+For example macro converting IP prefix to network/wildcard form is
+called with `ipfn.ip_w_wc` syntax.
 
-For good measure I added all formatting variants to our template and this is the final result:
+For good measure I added all formatting variants to our template
+and this is the final result:
 
 
     Prefix with prefix length ACL:
@@ -4509,24 +4782,40 @@ For good measure I added all formatting variants to our template and this is the
     permit tcp 10.0.0.0 255.255.255.0 10.91.6.32 255.255.255.224 eq 6800
 
 
-Moving macros to their own files and importing them from other templates is a very powerful feature. I will be talking more about it in the future post on imports and includes.
+Moving macros to their own files and importing them from other templates
+is a very powerful feature. I will be talking more about it in the
+future post on imports and includes.
 
 ## Advanced Macro Usage
 
 ## Varargs And Kwargs
 
-Inside of macros you can access special variables that are exposed by default. Some of them relate to internal plumbing and are not very interesting but few of them you might find use for.
+Inside of macros you can access special variables that are exposed
+by default. Some of them relate to internal plumbing and are not very
+interesting but few of them you might find use for.
 
-- `varargs` - if macro was given more positional arguments than explicitly listed in macro's definition, then Jinja will put them into special variable called `varargs`. You can then iterate over them and process if you feel it makes sense.
-- `kwargs` - similarly to `varargs`, any keyword arguments not matching explicitly listed ones will end up in `kwargs` variable. This can be iterated over using `kwargs.items()` syntax.
+- `varargs` - if macro was given more positional arguments than
+explicitly listed in macro's definition, then Jinja will put them into
+special variable called `varargs`. You can then iterate over them
+and process if you feel it makes sense.
+- `kwargs` - similarly to `varargs`, any keyword arguments not matching
+explicitly listed ones will end up in `kwargs` variable. This can be
+iterated over using `kwargs.items()` syntax.
 
-Personally I think both of these are not very useful in most of use cases. In the world of web development it might make sense to accept a number of elements for rendering tables, and other HTML items.
+Personally I think both of these are not very useful in most of use cases.
+In the world of web development it might make sense to accept a number
+of elements for rendering tables, and other HTML items.
 
-In the world of infrastructure automation I prefer explicit arguments and clear intent which I feel is not the case when using special variables.
+In the world of infrastructure automation I prefer explicit arguments
+and clear intent which I feel is not the case when using special variables.
 
-I do have some contrived examples to show you how that would work if you ever feel you really can make use of this feature.
+I do have some contrived examples to show you how that would work
+if you ever feel you really can make use of this feature.
 
-Below macro takes one explicit argument `vid`, which specifies VLAN ID we want assigned as access port to interfaces. Any extra positional arguments will be treated as interface names that need to be configured for the given VLAN ID.
+Below macro takes one explicit argument `vid`, which specifies VLAN ID
+we want assigned as access port to interfaces. Any extra positional
+arguments will be treated as interface names that need to be configured
+for the given VLAN ID.
 
 
     {% macro set_access_vlan(vid) -%}
@@ -4554,7 +4843,9 @@ Result:
     switchport access vlan 10
 
 
-Below is similar macro but this time we have no explicit arguments. We will however read any passed keyword arguments and we treat key as the interface name and value as VLAN ID to assign.
+Below is similar macro but this time we have no explicit arguments. We
+will however read any passed keyword arguments and we treat key as the
+interface name and value as VLAN ID to assign.
 
 
     {% macro set_access_vlan() -%}
@@ -4586,21 +4877,33 @@ Render results:
     switchport access vlan 20
 
 
-Both of these examples work and even do something potentially useful. These special variables just don't feel right to me but they're there if you ever need them.
+Both of these examples work and even do something potentially useful.
+These special variables just don't feel right to me but they're there
+if you ever need them.
 
 ## Call Block
 
-Call blocks are constructs that call other macros and are themselves macros, except they have no names, so they're only used at the point they appear.
+Call blocks are constructs that call other macros and are themselves
+macros, except they have no names, so they're only used at
+the point they appear.
 
 You use call bocks with `{% call called_macro() %}...{% endcal %}` syntax.
 
-These work a bit like callbacks since macros they invoke in turn call back to execute `call` macros. You can see similarities here to our ACL macro that used different formatting macros. We can have many `call` macros using single named macro, with these `call` macros allowing variation in logic executed by named macro.
+These work a bit like callbacks since macros they invoke in turn call
+back to execute `call` macros. You can see similarities here to our ACL
+macro that used different formatting macros. We can have many `call`
+macros using single named macro, with these `call` macros allowing
+variation in logic executed by named macro.
 
-I don't know if there's a historical reason for their existence since I can't really see any advantage of using these over named macros. They are also not very intuitive to use. But again, they're here and maybe you will find need for them.
+I don't know if there's a historical reason for their existence since
+I can't really see any advantage of using these over named macros.
+They are also not very intuitive to use. But again,
+they're here and maybe you will find need for them.
 
 So contrived example time!
 
-Bellow `call` macro calls `make_acl` macro which in turn calls back to execute calling macro:
+Bellow `call` macro calls `make_acl` macro which in turn
+calls back to execute calling macro:
 
 
     {% macro make_acl(type, name) -%}
@@ -4622,16 +4925,21 @@ Result:
     deny ip any any
 
 
-We got some sensible result here, but at what cost? Do you see how ACL lines made it to the body? The magic is in `{{ caller() }}` line. Here special function `caller()` essentially executes body of the `call` block that called `make_acl` macro.
+We got some sensible result here, but at what cost? Do you see how ACL
+lines made it to the body? The magic is in `{{ caller() }}` line.
+Here special function `caller()` essentially executes body
+of the `call` block that called `make_acl` macro.
 
 This is what happened, step by step:
 
 - `call` launched `make_acl`
-- `make_acl` worked its way through, rendering stuff, until it encountered `caller()`
+- `make_acl` worked its way through, rendering stuff, until
+it encountered `caller()`
 - `make_acl` executed calling block with `caller()` and inserted results
 - `make_acl` moved on past `caller()` through the rest of its body
 
-It works but again I see no advantage over using named macros and passing them explicitly around.
+It works but again I see no advantage over using named macros and
+passing them explicitly around.
 
 Fun is not over yet though, called macro can invoke caller with arguments.
 
@@ -4655,28 +4963,48 @@ Fun is not over yet though, called macro can invoke caller with arguments.
     {% endfor -%}
 
 
-This is a `call` block version of our ACL rendering with variable formatters. This time I included formatter inside of the `call` block. Our block takes `ip_net` argument which it expects called macro to provide when calling back.
+This is a `call` block version of our ACL rendering with variable
+formatters. This time I included formatter inside of the `call` block.
+Our block takes `ip_net` argument which it expects called macro
+to provide when calling back.
 
 And this is exactly what happens on the below line:
 
     permit {{ line.prot }} {{ caller(src_pfx) }} {{ caller(line.ip) }}
 
-So, we have `call` block call `acl_lines` with two arguments. Macro `acl_lines` then calls `call` back with `caller(src_pfx)` and `caller(line.ip)` fulfilling its contract.
+So, we have `call` block call `acl_lines` with two arguments.
+Macro `acl_lines` then calls `call` back with `caller(src_pfx)`
+and `caller(line.ip)` fulfilling its contract.
 
-Caveat here is that we cannot reuse our formatter, it's all in the unnamed macro aka `call` block. Once it executes, that's it, you need a new one if you want to use formatter.
+Caveat here is that we cannot reuse our formatter, it's all in the
+unnamed macro aka `call` block. Once it executes, that's it,
+you need a new one if you want to use formatter.
 
 ## Conclusion
 
-I think that macros are one of the more powerful features of Jinja and you will benefit greatly from learning how to use them. Combined with `import` you will get reusable, well defined groups of snippets that can be kept separately from other templates. This allows us to extract repeatable, sometimes complex, logic, and make our templates cleaner and easier to follow.
+I think that macros are one of the more powerful features of
+Jinja and you will benefit greatly from learning how to use them.
+Combined with `import` you will get reusable, well defined groups of
+snippets that can be kept separately from other templates.
+This allows us to extract repeatable, sometimes complex, logic,
+and make our templates cleaner and easier to follow.
 
-As always, see what works for you. If your macros get unwieldy consider using custom filters. And be careful when using advanced `macro` features, these should really be only reserved for special cases, if used at all.
+As always, see what works for you. If your macros get unwieldy consider
+using custom filters. And be careful when using advanced `macro` features,
+these should really be only reserved for special cases, if used at all.
 
-I hope you learned something from this post and that it gave you some ideas. More posts on Jinja2 are coming so do pop by every so often to see what's new :)
+I hope you learned something from this post and that it gave you some
+ideas. More posts on Jinja2 are coming so do pop by every so
+often to see what's new :)
 
 
 # Jinja2 Tutorial - Part 6 - Include And Import
 
-Welcome to another instalment in my Jinja2 Tutorial series. So far we've learned a lot about rendering, control structures and various functions. Here we'll start discussing language features that help us deal with organizing templates. First constructs we'll look at are `include` and `import` statements.
+Welcome to another instalment in my Jinja2 Tutorial series. So far
+we've learned a lot about rendering, control structures and various
+functions. Here we'll start discussing language features that help us
+deal with organizing templates. First constructs we'll look
+at are `include` and `import` statements.
 
 
 ## Contents
@@ -4696,25 +5024,37 @@ Welcome to another instalment in my Jinja2 Tutorial series. So far we've learned
 
 ## Introduction
 
-`Include` and `Import` statements are some of the tools that Jinja gives us to help with organizing collections of templates, especially once these grow in size.
+`Include` and `Import` statements are some of the tools that Jinja
+gives us to help with organizing collections of templates,
+especially once these grow in size.
 
-By using these constructs we can split templates into smaller logical units, leading to files with well-defined scopes. This in turn will make it easier to modify templates when new requirements come up.
+By using these constructs we can split templates into smaller
+logical units, leading to files with well-defined scopes.
+This in turn will make it easier to modify templates
+when new requirements come up.
 
-The end goal of well-structured collection of templates is increased re-usability as well as maintainability.
+The end goal of well-structured collection of templates is
+increased re-usability as well as maintainability.
 
 ## Purpose And Syntax
 
-'Include' statement allows you to break large templates into smaller logical units that can then be assembled in the final template.
+'Include' statement allows you to break large templates into
+smaller logical units that can then be assembled in the final template.
 
-When you use `include` you refer to another template and tell Jinja to render the referenced template. Jinja then inserts rendered text into the current template.
+When you use `include` you refer to another template and tell
+Jinja to render the referenced template. Jinja then inserts
+rendered text into the current template.
 
 Syntax for `include` is:
 
     {% include 'path_to_template_file' %}
 
-where 'path_to_template_file' is the full path to the template which we want included.
+where 'path_to_template_file' is the full path to
+the template which we want included.
 
-For instance, below we have template named `cfg_draft.j2` that tells Jinja to find template named `users.j2`, render it, and replace `{% include ... %}` block with rendered text.
+For instance, below we have template named `cfg_draft.j2`
+that tells Jinja to find template named `users.j2`, render it,
+and replace `{% include ... %}` block with rendered text.
 
 `cfg_draft.j2`
 
@@ -4736,7 +5076,11 @@ Final result:
 
 ## Using 'Include' To Split Up Large Templates
 
-If you look at typical device configuration, you will see a number of sections corresponding to given features. You might have interface configuration section, routing protocol one, access-lists, routing policies, etc. We could write single template generating this entire configuration:
+If you look at typical device configuration, you will see a number of
+sections corresponding to given features. You might have
+interface configuration section, routing protocol one, access-lists,
+routing policies, etc. We could write single template generating this
+entire configuration:
 
 `device_config.j2`
 
@@ -4780,13 +5124,24 @@ If you look at typical device configuration, you will see a number of sections c
     {%- endfor %}
 
 
-Often we grow our templates organically and add one section after another to the single template responsible for generating configuration. Over time however this template grows too large and it becomes difficult to maintain it.
+Often we grow our templates organically and add one section after
+another to the single template responsible for generating configuration.
+Over time however this template grows too large and it becomes
+difficult to maintain it.
 
-One way of dealing with the growing complexity is to identify sections that roughly correspond to single feature. Then we can move them into their own templates that will be included in the final one.
+One way of dealing with the growing complexity is to identify sections
+that roughly correspond to single feature. Then we can move them into
+their own templates that will be included in the final one.
 
-What we're aiming for is a number of smaller templates dealing with clearly defined feature configuration sections. That way it's easier to locate file to modify when you need to make changes. It's also easier to tell which template does what since we can now give them appropriate names like "bgp.j2" and "acls.j2", instead of having one big template named "device_config.j2".
+What we're aiming for is a number of smaller templates dealing with
+clearly defined feature configuration sections. That way it's easier
+to locate file to modify when you need to make changes.
+It's also easier to tell which template does what since we can now
+give them appropriate names like "bgp.j2" and "acls.j2", instead of
+having one big template named "device_config.j2".
 
-Taking the previous template we can decompose it into smaller logical units:
+Taking the previous template we can decompose it
+into smaller logical units:
 
 `base.j2`
 
@@ -4845,9 +5200,14 @@ Taking the previous template we can decompose it into smaller logical units:
     {%- endfor %}
 
 
-We now have a collection of separate templates, each with a clear name conveying its purpose. While our example doesn't have too many lines, I think you'd agree with me that the logical grouping we arrived at will be easier to work with and it'll be quicker to build mental model of what is going on here.
+We now have a collection of separate templates, each with a clear
+name conveying its purpose. While our example doesn't have too many lines,
+I think you'd agree with me that the logical grouping we arrived at will
+be easier to work with and it'll be quicker to build mental model
+of what is going on here.
 
-With features moved to individual templates we can finally use `include` statements to compose our final config template:
+With features moved to individual templates we can finally
+use `include` statements to compose our final config template:
 
 `config_final.j2`
 
@@ -4867,17 +5227,26 @@ With features moved to individual templates we can finally use `include` stateme
     {% include 'bgp.j2' %}
 
 
-You open this template and just from a quick glance you should be able to get an idea as to what it's trying to do. It's much cleaner, and we can easily add comments that won't get lost among hundreds of other lines.
+You open this template and just from a quick glance you should be
+able to get an idea as to what it's trying to do. It's much cleaner,
+and we can easily add comments that won't get lost
+among hundreds of other lines.
 
-As a bonus, you can quickly test template with one feature disabled by commenting single line out, or simply temporarily removing it.
+As a bonus, you can quickly test template with one feature disabled
+by commenting single line out, or simply temporarily removing it.
 
-It's now easier to make changes and it's faster to identify feature and corresponding template instead of searching through one big template with potentially hundreds of lines.
+It's now easier to make changes and it's faster to identify feature
+and corresponding template instead of searching through
+one big template with potentially hundreds of lines.
 
-Similarly, when new section is needed we can create separate template and include it in the final template therefore fulfilling our goal of increasing modularity.
+Similarly, when new section is needed we can create separate
+template and include it in the final template therefore
+fulfilling our goal of increasing modularity.
 
 ## Shared Template Snippets With 'Include'
 
-You might have also noticed that one of the included templates had itself `include` statement.
+You might have also noticed that one of the included templates
+had itself `include` statement.
 
 `base.j2`
 
@@ -4889,27 +5258,48 @@ You might have also noticed that one of the included templates had itself `inclu
     ^
 
 
-You can use `include` statement at any level in the hierarchy of templates and anywhere in the template you want. This is exactly what we did here; we moved text of our banner to a separate file which we then include in `base.j2` template.
+You can use `include` statement at any level in the hierarchy of
+templates and anywhere in the template you want. This is exactly
+what we did here; we moved text of our banner to a separate
+file which we then include in `base.j2` template.
 
-We could argue that banner itself is not important enough to warrant its own template. However, there's another class of use cases where `include` is helpful. We can maintain library of common snippets used across many different templates.
+We could argue that banner itself is not important enough to warrant
+its own template. However, there's another class of use cases
+where `include` is helpful. We can maintain library of common
+snippets used across many different templates.
 
-This differs from our previous example, where we decomposed one big template into smaller logical units all tightly related to the final template. With common library we have units that are re-usable across many different templates that might not otherwise have any similarities.
+This differs from our previous example, where we decomposed one big
+template into smaller logical units all tightly related to
+the final template. With common library we have units that
+are re-usable across many different templates that might
+not otherwise have any similarities.
 
 ## Missing And Alternative Templates
 
-Jinja allows us to ask for template to be included `optionally` by adding `ignore missing` argument to `include`.
+Jinja allows us to ask for template to be included `optionally`
+by adding `ignore missing` argument to `include`.
 
     {% include 'guest_users.j2' ignore missing %}
 
-It essentially tells Jinja to look for `guest_users.j2` template and insert rendered text if found. If template is not found this will result in blank line, but no error will be raised.
+It essentially tells Jinja to look for `guest_users.j2` template and
+insert rendered text if found. If template is not found this will
+result in blank line, but no error will be raised.
 
-I would generally advise against using this in your templates. It's not something that's widely used so someone reading your template might not know what it's meant to do. End result also relies on the presence of the specific file which might make troubleshooting more difficult.
+I would generally advise against using this in your templates.
+It's not something that's widely used so someone reading your template
+might not know what it's meant to do. End result also relies on the
+presence of the specific file which might make troubleshooting more difficult.
 
-There are better ways of dealing with optional features, some of which rely on template inheritance that we will talk about in the next post.
+There are better ways of dealing with optional features, some of
+which rely on template inheritance that we will talk about in the next post.
 
-Closely related to 'ignore missing' is possibility of providing list of templates to include. Jinja will check templates for existence, including the first one that exists.
+Closely related to 'ignore missing' is possibility of providing list
+of templates to include. Jinja will check templates for existence,
+including the first one that exists.
 
-In the below example, if `local_users.j2` does not exist but `radius_users.j2` does, then rendered `radius_users.j2` will end up being inserted.
+In the below example, if `local_users.j2` does not exist
+but `radius_users.j2` does, then rendered `radius_users.j2` will
+end up being inserted.
 
     {% include ['local_users.j2', 'radius_users.j2'] %}
 
@@ -4917,9 +5307,13 @@ You can even combine list of templates with `ignore missing` argument:
 
     {% include ['local_users.j2', 'radius_users.j2'] ignore missing %}
 
-This will result in search for listed templates and no error raised if none of them are found.
+This will result in search for listed templates and no error raised
+if none of them are found.
 
-Again, while tempting, I'd advise against using this feature unless you exhausted other avenues. I wouldn't enjoy having to figure out which one of the listed templates ended up being included if something didn't look right in my final render.
+Again, while tempting, I'd advise against using this feature unless you
+exhausted other avenues. I wouldn't enjoy having to figure out which
+one of the listed templates ended up being included
+if something didn't look right in my final render.
 
 To summarize, you can use 'include' to:
 
@@ -4928,9 +5322,14 @@ To summarize, you can use 'include' to:
 
 ## Import Statement
 
-In Jinja we use `import` statement to access macros kept in other templates. The idea is to have often used macros in their own files that are then imported in the templates that need them.
+In Jinja we use `import` statement to access macros kept in other
+templates. The idea is to have often used macros in their own files
+that are then imported in the templates that need them.
 
-This is different than `include` statement in that no rendering takes place here. Instead the way it works is very similar to import statement in Python. Imported macros are made available for use in the template that imports them.
+This is different than `include` statement in that no rendering
+takes place here. Instead the way it works is very similar
+to import statement in Python. Imported macros are made available
+for use in the template that imports them.
 
 ## Three Ways Of Importing
 
@@ -4954,7 +5353,8 @@ All three ways will use import the below template:
     {%- endmacro -%}
 
 
-1. Importing the whole template and assigning it to variable. Macros are attributes of the variable.
+1. Importing the whole template and assigning it to variable.
+Macros are attributes of the variable.
 
 `imp_ipfn_way1.j2`
 
@@ -4974,7 +5374,8 @@ All three ways will use import the below template:
 
     {{ ip_w_wc('10.0.0.0/24') }}
     {{ ip_w_pfxlen('10.0.0.0/24') }}
-3. Importing specific macro into the current namespace and giving it an alias.
+3. Importing specific macro into the current namespace and
+giving it an alias.
 
 `imp_ipfn_way3`
 
@@ -4995,17 +5396,27 @@ You can also combine 2 with 3:
     {{ ip_w_pfxlen('10.0.0.0/24') }}
 
 
-My recommendation is to always use `1`. This forces you to access macros via explicit namespace. Methods `2` and `3` risk clashes with variables and macros defined in the current namespace. As is often the case in Jinja, explicit is better than implicit.
+My recommendation is to always use `1`. This forces you to access
+macros via explicit namespace. Methods `2` and `3` risk clashes with
+variables and macros defined in the current namespace.
+As is often the case in Jinja, explicit is better than implicit.
 
 ## Caching And Context Variables
 
-Imports are cached, which means that they are loaded very quickly on each subsequent use. There is a price to pay for that, namely the imported templates don't have access to variables in template that imports them.
+Imports are cached, which means that they are loaded very quickly
+on each subsequent use. There is a price to pay for that, namely
+the imported templates don't have access to variables
+in template that imports them.
 
-This means that by default you can't access variables passed into the context inside of macros imported from another file.
+This means that by default you can't access variables passed into
+the context inside of macros imported from another file.
 
-Instead you have to build your macros so that they only rely on values passed to them explicitly.
+Instead you have to build your macros so that they only rely
+on values passed to them explicitly.
 
-To illustrate this I wrote two versions of macro named `def_if_desc`, one trying to access variables available to template importing it. The other macro relies on dictionary passed to it explicitly via value.
+To illustrate this I wrote two versions of macro named `def_if_desc`,
+one trying to access variables available to template importing it.
+The other macro relies on dictionary passed to it explicitly via value.
 
 Both versions use the below data:
 
@@ -5046,9 +5457,11 @@ When I try to render `im_defdesc_vars.j2` I get the below traceback:
     jinja2.exceptions.UndefinedError: 'interfaces' is undefined
 
 
-You can see that Jinja complains that it cannot access `interfaces`. This is just as we expected.
+You can see that Jinja complains that it cannot access `interfaces`.
+This is just as we expected.
 
-- Version accessing key of dictionary passed explicitly by importing template.
+- Version accessing key of dictionary passed explicitly
+by importing template.
 
 `default_desc.j2`
 
@@ -5072,11 +5485,17 @@ And this renders just fine:
     Unused port, dedicated to desktop devices
 
 
-Hopefully now you can see what the default behavior is when importing macros. Since values of variables in the context can change at any time, Jinja engine cannot cache them and we are not allowed to access them from within macros.
+Hopefully now you can see what the default behavior is
+when importing macros. Since values of variables in the context
+can change at any time, Jinja engine cannot cache them and
+we are not allowed to access them from within macros.
 
 ## Disabling Macro Caching
 
-However, if for whatever reason you think it is a good idea to allow your macros to access context variables you can change the default behavior with additional argument `with context` which you pass to `import` statement.
+However, if for whatever reason you think it is a good idea
+to allow your macros to access context variables you can change
+the default behavior with additional argument `with context`
+which you pass to `import` statement.
 
 > Note: This will automatically disable caching.
 
@@ -5104,56 +5523,90 @@ And now it works:
     Unused port, dedicated to devices
 
 
-Personally, I don't think it's a good idea to use `import` together `with context`. The whole point of importing macros from separate file is to allow them to be used in other templates and leveraging caching. There could be potentially hundreds, if not thousands, of them, and as soon as you use `with context` the caching is gone.
+Personally, I don't think it's a good idea to use `import`
+together `with context`. The whole point of importing macros
+from separate file is to allow them to be used in other templates and
+leveraging caching. There could be potentially hundreds,
+if not thousands, of them, and as soon as you
+use `with context` the caching is gone.
 
-I can also see some very subtle bugs creeping in in macros that rely on accessing variables from template context.
+I can also see some very subtle bugs creeping in in macros that
+rely on accessing variables from template context.
 
-To be on the safe side, I'd say stick with standard import and always use namespaces, e.g.
+To be on the safe side, I'd say stick with standard
+import and always use namespaces, e.g.
 
     {% import 'macros/ip_funcs.j2' as ipfn %}
 
 ## Conclusion
 
-We learned about two Jinja constructs that can help us in managing complexity emerging when our templates grow in size. By leveraging `import` and `include` statements we can increase re-usability and make our templates easier to maintain. I hope that included examples showed you how you can use this knowledge to make your template collection better organized and easier to understand.
+We learned about two Jinja constructs that can help us in managing
+complexity emerging when our templates grow in size.
+By leveraging `import` and `include` statements
+we can increase re-usability and make our templates easier to maintain.
+I hope that included examples showed you how you can use this
+knowledge to make your template collection better organized
+and easier to understand.
 
 Here's my quick summary of what to use when:
 
 Import Include
-Purpose Imports macros from other templates Renders other template and inserts results
+Purpose Imports macros from other templates Renders other
+template and inserts results
 Context variables Not accessible (default) Accessible
-Good for Creating shared macro libraries Splitting template into logical units and common snippets
+Good for Creating shared macro libraries Splitting template into
+logical units and common snippets
 
-I hope you found this post useful and are looking forward to more. Next post will continue discussion of ways to organize templates by focusing on template inheritance. Stay tuned!
+I hope you found this post useful and are looking forward to more.
+Next post will continue discussion of ways to organize templates
+by focusing on template inheritance. Stay tuned!
 
 # J2Live - Online Jinja2 Parser
 
-Hello and welcome! In this post I'd like to present a little web based tool I've been working on over last couple of weeks, **J2Live**!
+Hello and welcome! In this post I'd like to present a little web based
+tool I've been working on over last couple of weeks, **J2Live**!
 
-**J2Live** is a live Jinja2 parser/renderer, you give it template, associated values, click a button and it gives you back wonderfully rendered text. It comes with some cool features, you can request `trim` and `lstrip` rendering options, use non-standard filters in your templates, and make non-printable characters visible.
+**J2Live** is a live Jinja2 parser/renderer, you give it template,
+associated values, click a button and it gives you back wonderfully
+rendered text. It comes with some cool features, you can request `trim`
+and `lstrip` rendering options, use non-standard filters in your templates,
+and make non-printable characters visible.
 
-Now, there are similar tools out there but none of them fit my needs. I wanted to have something that can be used as a companion tool for my ongoing Jinja2 tutorial, and that could also help with my own little experiments.
+Now, there are similar tools out there but none of them fit my needs.
+I wanted to have something that can be used as a companion tool for
+my ongoing Jinja2 tutorial, and that could also help with
+my own little experiments.
 
-Working on this project was a great learning opportunity, after all the best way to keep improving is by practice. And I'm sure that a lot of you will agree that when it comes to programming there's no such thing as too much practice :)
+Working on this project was a great learning opportunity, after all
+the best way to keep improving is by practice. And I'm sure that a lot
+of you will agree that when it comes to programming there's
+no such thing as too much practice :)
 
 So without further ado, I present to you **J2Live**!
 
 ![J2Live maing page](ttl255/j2live-main.png)
 
-The above screenshot shows the main, and only page, of J2Live, accessible at [https://j2live.ttl255.com](https://j2live.ttl255.com) .
+The above screenshot shows the main, and only page,
+of J2Live, accessible at [https://j2live.ttl255.com](https://j2live.ttl255.com) .
 
 ## J2Live Components
 
-The main 3 components are the text windows where you enter your template and data, and one frame where rendered template is displayed.
+The main 3 components are the text windows where you enter your
+template and data, and one frame where rendered template is displayed.
 
 Jinja2 Template
 
-Here's where you drop body of your template. You can either type in your template directly or you can copy paste the text of existing template.
+Here's where you drop body of your template. You can either type in
+your template directly or you can copy paste the text of existing template.
 
 Jinja2 Data
 
-In the data window you provide values to be passed to your template. These will become dictionary keys that can be then accessed from within the template.
+In the data window you provide values to be passed to your template.
+These will become dictionary keys that can be then accessed
+from within the template.
 
-Both JSON and YAML formats are natively supported so you can use either, the correct format will be automatically detected.
+Both JSON and YAML formats are natively supported so you can
+use either, the correct format will be automatically detected.
 
 Rendered Template
 
@@ -5167,11 +5620,14 @@ Moving on we have tree action buttons:
 - `Copy` - Copies text of rendered template to clipboard.
 - `Clear render` - Clears the text of rendered template.
 
-You don't need to use clear render button if you want to render a new template. If you request rendering with `Render template` the new result will just ovewrite the old one.
+You don't need to use clear render button if you want to render
+a new template. If you request rendering with `Render template`
+the new result will just ovewrite the old one.
 
 ## Additional Components
 
-Finally there are additional components that provide rendering options, extend template operations and affect displaying of rendered template.
+Finally there are additional components that provide rendering options,
+extend template operations and affect displaying of rendered template.
 
 Rendering Options
 - `Trim` - removes newlines, which are added by default, after Jinja2 tags.
@@ -5181,38 +5637,54 @@ Additional Filters
 
 I've added two extra filters that you can use in your templates.
 
-- `ipaddr` - this is a copy of `ipaddr` filter found in Ansible and it has the same functionality
-- `hash` - generates hash of value it's applied to, takes hashing algorithm as an argument e.g. `hash('sha1')` will use `sha1` algorithm. For list of supported algorithms see link in [References](#references).
+- `ipaddr` - this is a copy of `ipaddr` filter found in Ansible and
+it has the same functionality
+- `hash` - generates hash of value it's applied to, takes hashing
+algorithm as an argument e.g. `hash('sha1')` will use `sha1` algorithm.
+For list of supported algorithms see link in [References](#references).
 Show Whitespaces
 
-Finally, `Show whitespaces` switch enables/disables rendering of non-printable characters like spaces, tabs and newlines.
+Finally, `Show whitespaces` switch enables/disables rendering of
+non-printable characters like spaces, tabs and newlines.
 
-This option is particularly helpful when you try to learn how Jinja2 adds whitespaces to rendered templates. I spent hours early on in my journey with Jinja2 trying to understand how this works, hopefully with the help of this option you will save yourself some time :)
+This option is particularly helpful when you try to learn how
+Jinja2 adds whitespaces to rendered templates. I spent hours early
+on in my journey with Jinja2 trying to understand how this works,
+hopefully with the help of this option you will save yourself some time :)
 
 ## Jinja2 Tutorial
 
-You can use **J2Live** as a companion tool for my Jinja2 Tutorial, simply copy paste example templates and data from the blog post.
+You can use **J2Live** as a companion tool for my Jinja2 Tutorial,
+simply copy paste example templates and data from the blog post.
 
 ## J2Live In Action
 
 I've also prepared gifs showing two features in action:
 
-Here we have template rendered without any options and then same template rendered with `Trim` enabled:
+Here we have template rendered without any options and then same
+template rendered with `Trim` enabled:
 
 ![J2Live Trim](ttl255/j2l-trim-latest-01.gif)
 
 
-This one is my favourite, you can see here how `Show whitespaces` toggle clearly displays spaces, tabs and newlines in your rendered template:
+This one is my favourite, you can see here how `Show whitespaces` toggle
+clearly displays spaces, tabs and newlines in your rendered template:
 
 ![J2Live rendering whitespaces](ttl255/j2l-ws-latest-01.gif)
 
 ## Closing Thoughts
 
-While app is completely functional I plan to add some more things to it over time. Notably I want to provide all of the examples from my Jinja2 Tutorial as loadable units so that you can immediately try them out.
+While app is completely functional I plan to add some more things to
+it over time. Notably I want to provide all of the examples from my
+Jinja2 Tutorial as loadable units so that you can immediately try them out.
 
-I also want to open source code of this app so that you can run it locally or go wild with adding filters customized to your use cases. Before I do that I need to tidy up a few things and provide documentation, hopefully it will be all ready within next few weeks.
+I also want to open source code of this app so that you can run it
+locally or go wild with adding filters customized to your use cases.
+Before I do that I need to tidy up a few things and provide documentation,
+hopefully it will be all ready within next few weeks.
 
-If you have any questions or encounter any bugs feel free to ping me on Twitter [@ttl255](https://twitter.com/ttl255), I'll try to do my best to help.
+If you have any questions or encounter any bugs feel free to ping me
+on Twitter [@ttl255](https://twitter.com/ttl255), I'll try to do my best to help.
 
 I hope you'll find this little tool useful, so make sure to give [J2Live](https://j2live.ttl255.com) a try!
 
