@@ -9,9 +9,16 @@
 {% block content %}
 <main>
 {% if items and items | length > 0 %}
+    <table>
     {% for item in items %}
-    <p>{{ item.name }} - {{ item.quantity }} x {{ "{:,}".format(item.discounted|int) }}</p>
+    <tr>
+        <td><a href="#">x</a></td>
+        <td>{{ item.name }}</td>
+        <td><input type="number" value="{{ item.quantity }}" /></td>
+        <td>{{ "{:,}".format(item.discounted|int) }} VNĐ</td>
+    </tr>
     {% endfor %}
+    </table>
 {% else %}
 <div class="message warning">
     <p>No item in cart, <a href="{{ url_for(".homepage") }}">shoping now</a></p>

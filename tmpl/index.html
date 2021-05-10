@@ -16,9 +16,9 @@
         </a>
         <h3><a href="{{ url_for(".detail_product",name=prd.slug) }}">{{ prd.name }}</a></h3>
         <p>
-            <strong>{{ "{:,}".format(prd.discounted_price | int) }}</strong>
+            <strong>{{ "{:,}".format(prd.discounted_price | int) }}&#8363;</strong>
             {% if prd.regular_price != prd.discounted_price %}
-            <del>{{ "{:,}".format(prd.regular_price | int) }}</del>
+            <del>{{ "{:,}".format(prd.regular_price | int) }}&#8363;</del>
             {% endif %}
         </p>
         <a href="{{ url_for(".addtocart",id=prd.id) }}" class="addtocart" data-id="{{ prd.id }}" data-quantity="1">Add to cart</a>
