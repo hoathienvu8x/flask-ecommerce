@@ -63,6 +63,127 @@ và cài đặt **Visual Studio Code** chúng ta tham khảo [tài liệu tại 
 đây là trên quan điểm của tác giả để có thể có một trình soạn thảo mã nguồn
 **Python** nhỏ và nhẹ nhất để tiến hành học **Python**
 
+
+## Làm quen với vài ví dụ Python cơ bản
+
+Hãy mở trình soạn thảo văn bản của chúng ta và nhập đoạn mã sau lưu với
+tên tập tin là `hello.py`. lưu ý đuôi là `.py`
+
+    print("hello, world!")
+
+Tiến hành chạy tập tin `hello.py` bằng câu lệnh sau
+
+    python hello.py
+
+> Lưu ý hãy chuyển tới thư mục lưu trữ tập tin `hello.py` trước khi thực
+thi câu lệnh trên nhé.
+
+Khi đó kết quả sẽ như sau
+
+    hello, world!
+
+Nếu kết quả trên màn hình của chúng ta có kết quả như vậy thì chúng ta đã
+hoàn tất một ví dụ nhỏ về **Python**
+
+## Các từ khóa của Python
+
+Trong **Python** sẽ có các từ khóa cơ bản để chúng ta làm việc cụ thể nó
+sẽ bao gồm như sau
+
+- Nhập xuất: `print`, `input`
+- Rẽ nhánh: `if`, `else`, `elif`
+- Vòng lặp: `for`, `while`
+- Thoát và tiếp tục vòng lặp: `break`, `continue`
+- Định nghĩa hàm: `def`
+- Nạp thư viện: `from`, `import`
+
+### Từ khóa `print`
+
+`print` là một từ khóa hệ thống dành cho việc xuất ra màn hình với những
+thứ mình cần xem.
+
+Để xuất ra câu thông báo ta viết mã như sau
+
+    print("Nội dung thông báo")
+
+Khi thực thi thì trên màn hình sẽ xuất ra dòng chữ như sau
+
+    Nội dung thông báo
+
+> Từ khóa `print` cũng có thể xuất ra vài đối tượng nếu như nó được định
+nghĩa kiểu chuối trả về có nghĩa là hàm `__str__` trong đối tượng được định
+nghĩa
+
+### Từ khóa `input`
+
+`input` là từ khóa dùng cho mục đích nhận dữ liệu từ bàn phím của người dùng
+
+> Lưu ý từ khóa `input` giá trị mạc định là string, nếu ta muốn nhập một số
+nguyên a thì ta sẽ ép kiểu đầu vào như sau: `a = int(input())`
+
+Để yêu cầu người dùng nhập vào bất kỳ ký từ nào từ bàn phím ta viết mã
+như sau
+
+    print('Nhập vào tên bạn: ')
+    x = input()
+    print("Chào, {}".format(x))
+
+Trong đoạn mã trên sẽ xuất ra câu thông báo _Nhập vào tên bạn:_ và có màn
+hình chờ cho bạn nhập thông tin vào, sau khi nhập xong nhấn phím `Enter`
+thì sẽ xuất ra như sau
+
+    Nhập vào tên bạn: Bob
+    Chào, Bob
+
+## Từ khóa `if`, `else`, `elif`
+
+Từ khóa `if`, `else`, `elif` dùng để rẽ nhánh trong quá trình chúng ta
+kiểm tra một cái gì đó
+
+Cú pháp:
+
+    if điều kiện:
+        Khối lệnh xử lý if
+    elif điều kiện:
+        Khối lệnh xử lý elif
+    else:
+        Khối lệnh xử lý else
+
+Ví dụ với mã sau
+
+    print("Nhập vào một số từ 1 đến 3: ")
+    val = input()
+    if val == "1":
+        print("Một")
+    elif val == "2":
+        print("Hai")
+    elif val == "3":
+        print("Ba")
+    else:
+        print("Số bạn nhập không hợp lệ !")
+
+
+Khi thực thi với đầu vào là `1` thì sẽ có kết quả như sau
+
+    Nhập vào một số từ 1 đến 3: 1
+    Một
+
+Khi thực thi với đầu vào là `2` thì sẽ có kết quả như sau
+
+    Nhập vào một số từ 1 đến 3: 2
+    Hai
+
+Khi thực thi với đầu vào là `3` thì sẽ có kết quả như sau
+
+    Nhập vào một số từ 1 đến 3: 3
+    Ba
+
+Khi thực thi với đầu vào là `4` thì sẽ có kết quả như sau
+
+    Nhập vào một số từ 1 đến 3: 4
+    Số bạn nhập không hợp lệ !
+
+
 ## Soạn thảo mã Python
 
 Sau khi hoàn tất quá trình cài đặt **Python** và trình soạn thảo cho lựa
