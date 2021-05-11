@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block head %}
+<title></title>
+{% endblock %}
+{% block navi %}
+{% endblock %}
+{% block content %}
+<main>
+{% if not userid %}
+<a href="#">Login</a>
+<a href="#">Signup</a>
+{% endif %}
+<form action="{{ url_for(".checkout_page") }}" method="post">
+    <p>
+        <input type="text" name="fullname" value="{% if fullname %}{{ fullname }}{% endif %}" placeholder="Full Name" />
+    </p>
+    <p>
+        <input type="email" name="email" value="{% if email %}{{ email }}{% endif %}" placeholder="Email" />
+    </p>
+    <p>
+        <input type="tel" name="telephone" value="{% if telephone %}{{ telephone }}{% endif %}" placeholder="Telephone" />
+    </p>
+    <p>
+        <input type="text" name="address" value="{% if address %}{{ address }}{% endif %}" placeholder="Address" />
+    </p>
+    <p>
+        <label for="cash"><input type="radio" name="payment" id="cash" value="cash" checked="checked" /> Cash</label>
+        <label for="online"><input type="radio" name="payment" id="online" value="online" /> Bank transfer</label>
+    </p>
+    <p>
+        <textarea name="description" placeholder="Description"></textarea>
+    </p>
+    <p><input type="submit" value="Checkout" /></p>
+</form>
+{% if items and items | length > 0 %}
+    {% set ftotal= {'total': 0} %}
+    <table>
+    {% for item in items %}
+        <tr>
+        <td><strong>{{ item.name }}</strong></td>
+        <td>{{ item.quantity }} x {{ "{:,}".format(item.discounted|int) }}&#8363;</td>
+        </tr>
+        {% set subtotal = (item.quantity | int) * (item.discounted | int) %}
+        {% if ftotal.update({'total': ftotal.total + subtotal}) %}{% endif %}
+    {% endfor %}
+    <tr><td>Total</td><td>{{ "{:,}".format(ftotal.total) }}&#8363;</td></tr>
+    </table>
+{% endif %}
+</main>
+{% endblock %}

@@ -13,7 +13,7 @@
     {% for item in items %}
     <tr id="item-{{ item.id }}">
         <td><a class="removeitem" href="{{ url_for(".removeitem",id=item.id) }}" data-id="{{ item.id }}">x</a></td>
-        <td>{{ item.name }}</td>
+        <td><a href="{{ url_for(".detail_product",name=item.slug) }}">{{ item.name }}</a></td>
         <td><input type="number" value="{{ item.quantity }}" name="qty[{{ item.id }}]" min="1" max="100" /></td>
         <td>{{ "{:,}".format(item.discounted|int) }}&#8363;</td>
     </tr>
